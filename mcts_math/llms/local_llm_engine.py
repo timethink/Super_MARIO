@@ -28,19 +28,25 @@ def llm_init(config):
         tensor_parallel_size=len(GPUS), 
         trust_remote_code=True,
         seed=config.seed,
-        swap_space=config.swap_space
+        swap_space=config.swap_space,
+        enable_prefix_caching=True
     )
     sampling_params = SamplingParams(
         temperature=config.temperature,
         top_k=config.top_k,
         top_p=config.top_p,
-        use_beam_search=config.use_beam_search,
+        #use_beam_search=config.use_beam_search,
         best_of=config.best_of,
         max_tokens=config.max_tokens, 
         n=config.n_generate_sample,
         stop=config.stop,
-        #seed=config.seed,
+        logprobs=True
+        #seed=config.seed
     )
+    #将sampling_params保存到文件
+    sampling_params_file = "/workspace/MARIO_EVAL/data/runtime/sampling_params.yaml"
+    with open(sampling_params_file, "w") as f:
+        f.write(str(sampling_params))
     return llm, sampling_params
 
 

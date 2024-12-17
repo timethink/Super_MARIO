@@ -16,6 +16,11 @@ class MCTSNode(BaseNode):
 
     prior: float = 1.0
     c_puct: float = 1.5
+    token_ids_len: int = 0
+    
+    sequence_len: int = 0
+    mfu: float = 0.0
+    generate_time: float = 0.0
 
     __visit_count: int = PrivateAttr(default=0)
     __value_sum: float = PrivateAttr(default=0)
