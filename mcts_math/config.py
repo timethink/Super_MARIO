@@ -101,8 +101,8 @@ class BaseConfig:
     top_p: float = field(
         default=1.0, metadata={"help": "Float that controls the cumulative probability of the top tokens to consider. Must be in (0, 1]. Set to 1 to consider all tokens."}
     )
-    top_k: float = field(
-        default=-1.0, metadata={"help": "Float that controls the probability of other highly-scored candidates to be chosen"}
+    top_k: int = field(#此处修改float为int
+        default=-1, metadata={"help": "Float that controls the probability of other highly-scored candidates to be chosen"}
     )
     use_beam_search: bool = field(
         default=False, metadata={"help": "whether to enable beam search decoding"}
@@ -130,7 +130,7 @@ class BaseConfig:
         default=1, metadata={"help": "beam width for each step. B1 in paper."}
     )
     max_depth: int = field(
-        default=4, metadata={"help": "maximum depth of the tree, ie., maximum steps of completion."}
+        default=10, metadata={"help": "maximum depth of the tree, ie., maximum steps of completion."}
     )
     iterations: int = field(
         default=1, metadata={"help": "number of simulations in mcts"}
