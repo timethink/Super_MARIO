@@ -179,6 +179,16 @@ class BaseConfig:
     verbose: bool = field(
         default=False, metadata={"help": "print intermediate steps on screen"}
     )
+    enable_prefix_caching: bool = field(
+        default=False, metadata={"help": "enable prefix caching in vllm"}
+    )
+    #提取前多少道题目作为测试集
+    question_range: Optional[int] = field(
+        default=64, metadata={"help": "range of questions to test"}
+    )
+    disable_log_stats: bool = field(
+        default=True, metadata={"help": "disable log stats"}
+    )
 
 
 if __name__ == '__main__':

@@ -1,19 +1,29 @@
-mode: "mcts"          
-model_dir: "../AlphaMath-7B/" 
-swap_space: 16
-temperature: 0.6  
-errors_threshold: 3   # most allowed consecutive python errors
-prompt_wrap: "react_sft" 
-result_unwrap: "react_sft"
-step_delim: "\n"
-stop: ["\n</code>", "</code>", "</step>"]
-seed: 42
-need_value_func: True
-max_depth: 10
-n_generate_sample: 3
-best_of: 3
-iterations: 10
+batch_size: 1
+best_of: 1
 c_puct: 1.25
-verbose: False
-update_leaf_value: False
-batch_size: 32
+disable_log_stats: false
+enable_prefix_caching: true
+errors_threshold: 3
+iterations: 10
+max_depth: 20
+mode: mcts
+model_dir: ../AlphaMath-7B/
+n_generate_sample: 1
+need_value_func: true
+prompt_wrap: react_sft
+question_range: 1
+result_unwrap: react_sft
+seed: 42
+step_delim: '
+
+  '
+stop:
+- '
+
+  </code>'
+- </code>
+- </step>
+swap_space: 16
+temperature: 0.6
+update_leaf_value: false
+verbose: false

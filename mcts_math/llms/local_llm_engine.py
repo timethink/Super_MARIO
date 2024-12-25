@@ -29,7 +29,8 @@ def llm_init(config):
         trust_remote_code=True,
         seed=config.seed,
         swap_space=config.swap_space,
-        enable_prefix_caching=True
+        enable_prefix_caching=config.enable_prefix_caching,
+        disable_log_stats=config.disable_log_stats,#控制是否打印日志
     )
     sampling_params = SamplingParams(
         temperature=config.temperature,
@@ -41,7 +42,6 @@ def llm_init(config):
         n=config.n_generate_sample,
         stop=config.stop,
         logprobs=True
-        #seed=config.seed
     )
     #将sampling_params保存到文件
     sampling_params_file = "/workspace/MARIO_EVAL/data/runtime/sampling_params.yaml"
