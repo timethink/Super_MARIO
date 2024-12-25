@@ -34,6 +34,28 @@ from mcts_math.constants import (
 from .tree import BaseTree, code_execution
 from .step_beam import SBSREACT
 
+def calculate_prefill_flops(seq_length: int) -> float:
+    hidden_size = 4096
+    num_hidden_layers = 30
+    vocab_size = 102400
+
+    # 估算每次前向传播的 FLOPS 数量
+    flops_per_token = num_hidden_layers * (24 * hidden_size ** 2 + 4 * seq_length * hidden_size) + 2 * hidden_size * vocab_size
+    flops_per_forward = flops_per_token * seq_length
+    
+    return flops_per_forward
+
+def calculate_decode_flops( prefill_length: int, seq_length: int) -> float:
+    hidden_size = 4096
+    num_hidden_layers = 30
+    vocab_size = 102400
+
+    # 估算每次前向传播的 FLOPS 数量
+    flops_per_token = num_hidden_layers * (24 * hidden_size ** 2 + 4 * (prefill_length + seq_length) * hidden_size) + 2 * hidden_size * vocab_size
+    flops_per_forward = flops_per_token * seq_length
+    return flops_per_forward
+
+
 def calculate_mfu(seq_length: int,time: float) -> float:
     batch_size = 1
     hidden_size = 4096
@@ -331,10 +353,9 @@ class MCTS(SBSREACT):
             
             seed_value = current_node.token_ids_len
             random_generator = np.random.default_rng(seed_value)
-            random_number = random_generator.random()
+            #random_number = random_generator.random()
             #is_none = random_number < 0.2
-            value_estimate = random_number
-            #value_estimate = current_node.prior
+            value_estimate = random_generator.random()
     
 
             #打印value_estimate

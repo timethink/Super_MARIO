@@ -265,13 +265,19 @@ class Solver(BaseModel):
     def solve(self, solvers: List[BaseTree]):
         final_step = []
         final_seq_len = []
-        final_mfu = []
+        final_prefill_len = []
+        final_decode_len = []
+        final_pre_mfu = []
+        final_nopre_mfu = []
+        final_time = []
+        final_unfinished = []
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
             #在mcts中，这里的solvers是agents，每个agent包含一个MCTS对象，包括question，ground_truth,current_nodes,candidate_nodes等信息
             #将prompts,prompts_span,valid_solvers,invalid_solvers保存到文件中
             #将处理前的tree打印出来
+            """
             tree_filename1 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_pre_tree.json"
             tree_pic_name =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_pre_tree"
             jsonlines1 = {}
@@ -281,6 +287,8 @@ class Solver(BaseModel):
             jsonlines1 = json.dumps(jsonlines1, indent=4)
             with open(tree_filename1, "w") as f:
                 f.write(str(jsonlines1))
+            """
+            
 
             if len(valid_solvers) < 1:
                 break
@@ -294,10 +302,12 @@ class Solver(BaseModel):
             self.generate_sampling_params.best_of = n
             
             #将prompts保存到文件中
+            
             prompt_filename1 = f"/workspace/MARIO_EVAL/data/runtime_prompt/step_{step}_pre_generate_prompts.json"
             with open(prompt_filename1, "w") as f:
                 f.write(str(prompts))
                 f.write("\n")
+            
           
           #计算mfu
             batch_size = self.config.batch_size
@@ -311,24 +321,41 @@ class Solver(BaseModel):
             #计算outputs中的prompt长度和以及CompletionOutput的token_ids长度和
             prompt_len = 0
             decode_len = 0
+            prefill_len_sum = 0
+            decode_len_sum = 0
             seq_len = 0
-            flops_sum = 0
+            pre_flops_sum = 0
+            nopre_flops_sum = 0
             for output in outputs:
                 prompt_len = len(output.prompt)
                 seq_len += len(output.prompt)
-                flops_sum += calculate_prefill_flops(prompt_len)
+                prefill_len_sum += prompt_len
+                prefill_flops = calculate_prefill_flops(prompt_len)
+                pre_flops_sum += prefill_flops
                 for completion_output in output.outputs:
                     decode_len =  len(completion_output.token_ids)
                     seq_len += decode_len
-                    flops_sum += calculate_decode_flops(prompt_len, decode_len)   
+                    decode_len_sum += decode_len
+                    decode_flops= calculate_decode_flops(prompt_len, decode_len)   
+                    pre_flops_sum += decode_flops
+                    nopre_flops_sum += decode_flops
+                    
             #计算mfu
             mfu_time = end_time - start_time
             A100_flops = 312 * 10 ** 12
-            mfu = flops_sum / (A100_flops * mfu_time)
+            percentage = len(valid_solvers) / len(solvers)
+            pre_mfu = pre_flops_sum / (A100_flops * mfu_time)
+            nopre_mfu = nopre_flops_sum / (A100_flops * mfu_time)
             final_step.append(step)
             final_seq_len.append(seq_len)
-            final_mfu.append(mfu)
-            #将batch_size,seq_len,time,mfu保存到文件中
+            final_prefill_len.append(prefill_len_sum)
+            final_decode_len.append(decode_len_sum)
+            final_pre_mfu.append(pre_mfu)
+            final_nopre_mfu.append(nopre_mfu)
+            final_time.append(mfu_time)
+            final_unfinished.append(percentage)
+            #将batch_size,seq_len,time,mfu,percentage保存到文件中
+            """
             mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/step_{step}_mfu.json"
             with open(mfu_filename, "w") as f:
                 f.write(str(batch_size))
@@ -339,7 +366,9 @@ class Solver(BaseModel):
                 f.write("\n")
                 f.write(str(mfu))
                 f.write("\n")  
-
+                f.write(str(percentage))
+                f.write("\n")
+            """
             #将初始outputs保存到文件中
             filename2 = f"/workspace/MARIO_EVAL/data/runtime_output/step_{step}_generate_outputs.json"
             with open(filename2, "w") as f:
@@ -367,6 +396,7 @@ class Solver(BaseModel):
             #    f.write(str(valid_solvers))
             #    f.write("\n")
             #将处理后的tree打印出来
+            """
             tree_filename2 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_post_tree.json"
             tree_pic_name2 =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_post_tree"
             jsonlines2 = {}
@@ -374,8 +404,10 @@ class Solver(BaseModel):
                 jsonlines2[valid_solver.question] = valid_solver.return_states(tree_pic_name2)
             #格式化jsonlines
             jsonlines2 = json.dumps(jsonlines2, indent=4)
+
             with open(tree_filename2, "w") as f:
                 f.write(str(jsonlines2))
+            """
 
             # llm run for step evaluation
             prompts, prompts_span = self.value_preprocess(valid_solvers)
@@ -395,16 +427,20 @@ class Solver(BaseModel):
 
             if self.need_value_func:#是否用到value head
                 #将prompts保存到文件中
+                """
                 prompt_filename2 = f"/workspace/MARIO_EVAL/data/runtime_prompt/step_{step}_pre_value_prompts.json"
                 with open(prompt_filename2, "w") as f:
                     f.write(str(prompts))
                     f.write("\n")
+                """
                 outputs = self.llm(prompts, self.value_sampling_params)
                 #将初始outputs保存到文件中
+                """
                 filename6 = f"/workspace/MARIO_EVAL/data/runtime_output/step_{step}_value_outputs.json"
                 with open(filename6, "w") as f:
                     f.write(str(outputs))
                     f.write("\n")
+                """
                 reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
             else:
                 reconstructed_outputs = [None] * (len(prompts_span) - 1)
@@ -416,6 +452,7 @@ class Solver(BaseModel):
             #    f.write(str(valid_solvers))
             #    f.write("\n")
             #将处理后的tree打印出来
+            """
             tree_filename3 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_postvalue_tree.json"
             tree_pic_name3 =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_postvalue_tree"
             jsonlines3 = {}
@@ -425,10 +462,12 @@ class Solver(BaseModel):
             jsonlines3 = json.dumps(jsonlines3, indent=4)
             with open(tree_filename3, "w") as f:
                 f.write(str(jsonlines3))
+            """
 
             solvers = self.postprocess(valid_solvers, invalid_solvers)
             
             #将solvers的return_states()保存到文件中
+            """
             filename4 = f"/workspace/MARIO_EVAL/data/step_{step}_solvers_return_states.json"
             tree_pic_name4 =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_solvers_return_states"
             tmp_jsonlines = {}
@@ -438,17 +477,20 @@ class Solver(BaseModel):
             tmp_jsonlines = json.dumps(tmp_jsonlines, indent=4)
             with open(filename4, "w") as f:
                 f.write(str(tmp_jsonlines))
+            """
+            """
             #将处理后的tree打印出来
             tree_filename4 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_finish_tree.json"
             tree_pic_name4 =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_finish_tree"
             jsonlines4 = {}
             for i, solver in enumerate(solvers):         
                 jsonlines4[solver.question] = solver.return_states(tree_pic_name4)
-
             #格式化jsonlines
             jsonlines4 = json.dumps(jsonlines4, indent=4)
             with open(tree_filename4, "w") as f:
                 f.write(str(jsonlines4))
+            """
+            """
               #记录时间
             mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu.json"
             with open(mfu_filename, "w") as f:
@@ -456,6 +498,7 @@ class Solver(BaseModel):
                 f.write("\n")
                 f.write(str(final_mfu))
                 f.write("\n")
+         
             #单独画出final_mfu和final_seq_len随step的变化图
             mfu_step_pic_filename = f"/workspace/MARIO_EVAL/data/pic_mfu_step/final_mfu_step"
             plt.figure()
@@ -469,18 +512,83 @@ class Solver(BaseModel):
             plt.xlabel('step')
             plt.ylabel('seq_len')
             plt.savefig(seq_len_pic_filename)
+            """
 
-            mfu_pic_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf"
+            is_enable_prefix_caching = self.config.enable_prefix_caching
+            if is_enable_prefix_caching:
+                enable_number = 1
+            else:
+                enable_number = 0
+
+            pre_mfu_pic_filename = f"{foldername}/final_pre_mfu{enable_number}"
             #画出final_seq_len和final_mfu随step的变化图，在同一个图中
             #pic_mfu是final_mfu的十万倍
-            pic_mfu = [x*100000 for x in final_mfu]
             plt.figure()
-            plt.plot(final_step, final_seq_len, label='seq_len')
-            plt.plot(final_step, pic_mfu, label='mfu')
+            plt.plot(final_step, final_pre_mfu)
             plt.xlabel('step')
-            plt.ylabel('value')
-            plt.legend()
-            plt.savefig(mfu_pic_filename)
+            plt.ylabel('mfu')
+            plt.savefig(pre_mfu_pic_filename)
+            plt.close()
+
+            nopre_mfu_pic_filename = f"{foldername}/final_nopre_mfu{enable_number}"
+            #画出final_seq_len和final_mfu随step的变化图，在同一个图中
+            plt.figure()
+            plt.plot(final_step, final_nopre_mfu)
+            plt.xlabel('step')
+            plt.ylabel('mfu')
+            plt.savefig(nopre_mfu_pic_filename)
+            plt.close()
+
+            seq_len_pic_filename = f"{foldername}/final_seq_len{enable_number}"
+            #画出final_seq_len随step的变化图
+            plt.figure()
+            plt.plot(final_step, final_seq_len)
+            plt.xlabel('step')
+            plt.ylabel('seq_len')
+            plt.savefig(seq_len_pic_filename)
+            plt.close()
+
+            #画出final_prefill_len随step的变化图
+            prefill_len_pic_filename = f"{foldername}/final_prefill_len{enable_number}"
+            plt.figure()
+            plt.plot(final_step, final_prefill_len)
+            plt.xlabel('step')
+            plt.ylabel('prefill_len')
+            plt.savefig(prefill_len_pic_filename)
+            plt.close()
+
+            #画出final_decode_len随step的变化图
+            decode_len_pic_filename = f"{foldername}/final_decode_len{enable_number}"
+            plt.figure()
+            plt.plot(final_step, final_decode_len)
+            plt.xlabel('step')
+            plt.ylabel('decode_len')
+            plt.savefig(decode_len_pic_filename)
+            plt.close()
+
+            #画出time随step的变化图
+            time_pic_filename = f"{foldername}/final_time{enable_number}"
+            plt.figure()
+            plt.plot(final_step, final_time)
+            plt.xlabel('step')
+            plt.ylabel('time')
+            plt.savefig(time_pic_filename)
+            plt.close()
+
+            #画出final_unfinished随step的变化图
+            unfinished_pic_filename = f"{foldername}/final_unfinished{enable_number}"
+            plt.figure()
+            plt.plot(final_step, final_unfinished)
+            plt.xlabel('step')
+            plt.ylabel('unfinished')
+            plt.savefig(unfinished_pic_filename)
+            plt.close()
+
+
+
+            """
+            #画出mfu随seq_len的变化图
             seq_mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_seq_mfu"
             final_seq_len_sort = sorted(final_seq_len)
             pic_mfu_sort = [pic_mfu[final_seq_len.index(x)] for x in final_seq_len_sort]
@@ -489,37 +597,34 @@ class Solver(BaseModel):
             plt.xlabel('seq_len')
             plt.ylabel('mfu')
             plt.savefig(seq_mfu_filename)
-        
-        #记录时间
-        mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu.json"
-        with open(mfu_filename, "w") as f:
-            f.write(str(final_seq_len))
-            f.write("\n")
-            f.write(str(final_mfu))
-            f.write("\n")
-        #单独画出final_mfu和final_seq_len随step的变化图
-        mfu_step_pic_filename = f"/workspace/MARIO_EVAL/data/pic_mfu_step/final_mfu_step"
-        plt.figure()
-        plt.plot(final_step, final_mfu)
-        plt.xlabel('step')
-        plt.ylabel('mfu')
-        plt.savefig(mfu_step_pic_filename)
-        seq_len_pic_filename = f"/workspace/MARIO_EVAL/data/pic_mfu_step/final_seq_len_step"
-        plt.figure()
-        plt.plot(final_step, final_seq_len)
-        plt.xlabel('step')
-        plt.ylabel('seq_len')
-        plt.savefig(seq_len_pic_filename)
+            """
 
+        #记录时间
+        data = {
+            "final_step": final_step,
+            "final_seq_len": final_seq_len,
+            "final_prefill_len": final_prefill_len,
+            "final_decode_len": final_decode_len,
+            "final_pre_mfu": final_pre_mfu,
+            "final_nopre_mfu": final_nopre_mfu,
+            "final_time": final_time,
+            "final_unfinished": final_unfinished
+        }
+        #输出为json文件
+        data_filename = f"{foldername}/final_data{enable_number}.json"
+        #如果文件存在，则删除
+        #if os.path.exists(data_filename):
+        #    os.remove(data_filename)
+        with open(data_filename, "w") as f:
+            json.dump(data, f, indent=4)
+        """
         mfu_pic_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu"
         #画出final_seq_len和final_mfu随step的变化图，在同一个图中
         #pic_mfu是final_mfu的十万倍
-        pic_mfu = [x*100000 for x in final_mfu]
         plt.figure()
-        plt.plot(final_step, final_seq_len, label='seq_len')
-        plt.plot(final_step, pic_mfu, label='mfu')
+        plt.plot(final_step, final_mfu, label='mfu')
         plt.xlabel('step')
-        plt.ylabel('value')
+        plt.ylabel('percent')
         plt.legend()
         plt.savefig(mfu_pic_filename)
         seq_mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_seq_mfu"
@@ -530,8 +635,10 @@ class Solver(BaseModel):
         plt.xlabel('seq_len')
         plt.ylabel('mfu')
         plt.savefig(seq_mfu_filename)
-
+        
 
         tree_pic_name5 =  f"/workspace/MARIO_EVAL/data/pic_tree/{datetime.now().strftime('%Y%m%d%H%M%S')}_final_tree"        
+
+        """
         
     

@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 15s # 默认的指标抓取间隔
+  evaluation_interval: 15s # 默认的规则评估间隔
+
+scrape_configs:
+  - job_name: 'vllm'
+    static_configs:
+      - targets: ['localhost:8000'] # 替换为你的 vLLM 服务地址
