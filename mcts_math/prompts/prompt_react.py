@@ -24,6 +24,14 @@ class PROMPT_REACT:
         self.react_format_instructions = prompt['react_format_instructions']
         self.react_suffix = prompt['react_suffix']
 
-    def random_examples(self):
-        selected_examples = random.sample(self.few_examples, min(len(self.few_examples), self.num_few_shot))
+    def random_examples(self):#修改，将随机选取多个例子改为选取前num_few_shot个例子
+        #selected_examples = random.sample(self.few_examples, min(len(self.few_examples), self.num_few_shot))
+        if self.num_few_shot == 0:
+            selected_examples = []
+        else:
+            selected_examples = self.few_examples[:self.num_few_shot]
         return selected_examples
+    
+
+    
+        

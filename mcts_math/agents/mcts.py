@@ -178,7 +178,10 @@ class MCTS(SBSREACT):
             #这里出现了问题导致出错
             try:
             # 这里出现了问题导致出错
-              prior_prob = np.exp(output.cumulative_logprob / len(output.token_ids))
+              if len(output.token_ids) == 0:
+                prior_prob = 0.0
+              else:
+                prior_prob = np.exp(output.cumulative_logprob / len(output.token_ids))
               #print(f"output.cumulative_logprob: {output.cumulative_logprob}\n")
               #print(f"len(output.token_ids): {len(output.token_ids)}\n")
               #print(f"prior_prob: {prior_prob}\n")

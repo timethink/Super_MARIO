@@ -32,7 +32,7 @@ from .llms.local_llm_engine import llm_engine
 from .constants import TIMEOUT_SECONDS, ERROR_COLOR
 
 def set_seed(seed: int = 1024) -> None:
-    #np.random.seed(seed)
+    np.random.seed(seed)
     random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -58,10 +58,10 @@ def calculate_decode_flops( prefill_length: int, seq_length: int) -> float:
     hidden_size = 4096
     num_hidden_layers = 30
     vocab_size = 102400
-
+    flops_per_forward = 0
     # 估算每次前向传播的 FLOPS 数量
-    flops_per_token = num_hidden_layers * (24 * hidden_size ** 2 + 4 * (prefill_length + seq_length) * hidden_size) + 2 * hidden_size * vocab_size
-    flops_per_forward = flops_per_token * seq_length
+    for i in range(seq_length):
+        flops_per_forward += num_hidden_layers * (24 * hidden_size ** 2 + 4 * (prefill_length + i) * hidden_size) + 2 * hidden_size * vocab_size
     return flops_per_forward
 
 
@@ -319,6 +319,7 @@ class Solver(BaseModel):
 
             end_time = time.time()
             #计算outputs中的prompt长度和以及CompletionOutput的token_ids长度和
+            request_num = len(outputs)
             prompt_len = 0
             decode_len = 0
             prefill_len_sum = 0
@@ -331,6 +332,7 @@ class Solver(BaseModel):
                 seq_len += len(output.prompt)
                 prefill_len_sum += prompt_len
                 prefill_flops = calculate_prefill_flops(prompt_len)
+                #prefill_time = output.metrics.first_token_time - output.metrics.first_scheduled_time
                 pre_flops_sum += prefill_flops
                 for completion_output in output.outputs:
                     decode_len =  len(completion_output.token_ids)
@@ -339,17 +341,20 @@ class Solver(BaseModel):
                     decode_flops= calculate_decode_flops(prompt_len, decode_len)   
                     pre_flops_sum += decode_flops
                     nopre_flops_sum += decode_flops
-                    
+                #decode_time = output.metrics.finished_time - output.metrics.first_token_time
+                
             #计算mfu
             mfu_time = end_time - start_time
             A100_flops = 312 * 10 ** 12
             percentage = len(valid_solvers) / len(solvers)
             pre_mfu = pre_flops_sum / (A100_flops * mfu_time)
             nopre_mfu = nopre_flops_sum / (A100_flops * mfu_time)
+            average_prefill_len = prefill_len_sum / request_num
+            average_decode_len = decode_len_sum / request_num
             final_step.append(step)
             final_seq_len.append(seq_len)
-            final_prefill_len.append(prefill_len_sum)
-            final_decode_len.append(decode_len_sum)
+            final_prefill_len.append(average_prefill_len)
+            final_decode_len.append(average_decode_len)
             final_pre_mfu.append(pre_mfu)
             final_nopre_mfu.append(nopre_mfu)
             final_time.append(mfu_time)
@@ -514,7 +519,7 @@ class Solver(BaseModel):
             plt.savefig(seq_len_pic_filename)
             """
 
-            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             is_enable_prefix_caching = self.config.enable_prefix_caching
             if is_enable_prefix_caching:
                 enable_number = 1

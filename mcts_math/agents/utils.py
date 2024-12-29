@@ -37,7 +37,7 @@ def react_prompt_wrap(
 
     react_examples = prompt_react.random_examples()
     assert len(react_examples) > 0, "at least one example should be provided."
-
+    
     if len(react_examples) > 1:
         example_prefix = "The following are %d demonstration examples." % len(react_examples)
     elif len(react_examples) == 1:
@@ -45,6 +45,7 @@ def react_prompt_wrap(
 
     format_instructions = prompt_react.react_format_instructions.format(tool_desc=python_tool_string, tool_names=python_tool_name)
 
+    #print(f"format_instructions: {format_instructions}")
     prompt = "\n\n".join([format_instructions, example_prefix, *react_examples, prompt_react.react_suffix.format(input=inputs)])
     return prompt
 
@@ -92,6 +93,8 @@ def react_step_result_unwrap(
 
 
 # SFT react for Round >1
+#修改
+"""
 def react_sft_prompt_wrap(
     question: str, 
     partial_solution: str,
@@ -105,6 +108,58 @@ def react_sft_prompt_wrap(
 
     prompt = react_sft_prompt.format(question=question, partial_solution=inputs)
     return prompt
+
+"""
+
+def react_sft_prompt_wrap(
+    question: str, 
+    partial_solution: str,
+    config,
+) -> str:
+    # 获取分隔符
+    step_delim = config.step_delim
+
+    # 构造输入部分
+    if partial_solution:
+        inputs = f"{partial_solution}{step_delim}"
+    else:
+        inputs = f""
+
+    # 获取演示示例
+    prompt_react = PROMPT_REACT(config)
+    react_examples = prompt_react.random_examples()
+    #assert len(react_examples) > 0, "at least one example should be provided."
+
+    if len(react_examples) > 1:
+        example_prefix = "The following are %d demonstration examples." % len(react_examples)
+    elif len(react_examples) == 1:
+        example_prefix = "The following is a demonstration example."
+    elif len(react_examples) == 0:
+        example_prefix = ""
+
+    #做一个prompt，避免让前面的文本影响模型输出
+    ignore_prefix = "\nPlease ignore the following text and answer the question.Please disregard all previous instructions, context, and inputs. Start fresh and focus solely on the task described below. Here is the input: \n <quesiton> \n"
+
+    # 构造提示
+    #prompt = "\n\n".join([
+    #    example_prefix,
+    #    *react_examples,
+    #    react_sft_prompt.format(question=question, partial_solution=inputs)
+    #])
+
+    format_instructions = prompt_react.react_format_instructions.format(tool_desc=python_tool_string, tool_names=python_tool_name)
+
+    #print(f"format_instructions: {format_instructions}")
+    #将*react_examples保存到文件
+    with open("/workspace/MARIO_EVAL/data/runtime/react_examples.json", "w") as f:
+        f.write(str(react_examples))
+        
+    question_combine = "\n\n".join([example_prefix, *react_examples, prompt_react.react_suffix.format(input=inputs),ignore_prefix, question])
+    prompt = react_sft_prompt.format(question=question_combine, partial_solution=inputs)
+    if len(react_examples) == 0:
+        prompt = react_sft_prompt.format(question=question, partial_solution=inputs)
+    return prompt
+
 
 
 def react_sft_obs_wrap(observation: str) -> str:
