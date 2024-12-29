@@ -15,3 +15,4 @@ iterations: 40
 seed: 42
 is_sampling: True
 verbose: False
+num_few_shot: 5

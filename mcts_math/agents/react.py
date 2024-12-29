@@ -42,6 +42,7 @@ class REACT(BaseTree):
             self.obs_wrap = react_obs_wrap
             self.step_unwrap = react_step_result_unwrap
 
+        #修改
         elif self.config.prompt_wrap == "react_sft":
             from .utils import react_sft_prompt_wrap, react_sft_obs_wrap, react_sft_step_result_unwrap
 

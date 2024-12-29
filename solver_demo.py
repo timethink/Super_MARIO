@@ -112,7 +112,7 @@ def main():
 
     os.makedirs(folder_path1)
 
-    """
+    
     folder_path2 = '/workspace/MARIO_EVAL/data/runtime_prompt'
     if os.path.exists(folder_path2):
         shutil.rmtree(folder_path2)
@@ -124,10 +124,10 @@ def main():
         shutil.rmtree(folder_path3)
 
     os.makedirs(folder_path3)
-    """
 
 
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf'
+
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     if os.path.exists(foldername) and config.enable_prefix_caching == False:
         shutil.rmtree(foldername)
     if not os.path.exists(foldername):
@@ -169,7 +169,9 @@ def main():
     if os.path.exists(log_filename):
         os.remove(log_filename)
 
-    
+    stats_filename = "/workspace/MARIO_EVAL/data/runtime_data/stats.json"
+    if os.path.exists(stats_filename):
+        os.remove(stats_filename)
 
     # init method
     if config.mode == "mcts":
@@ -249,7 +251,7 @@ def main():
 
 def draw_pic(config):
         #输出数据对比文件
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf'
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     datafile0 = f"{foldername}/final_data{0}.json"
     datafile1 = f"{foldername}/final_data{1}.json"
     """with open(data_filename, "w") as f:
@@ -268,100 +270,104 @@ def draw_pic(config):
     #画图
     #将final_seq_len0, final_seq_len1画在一张图上
     
-    plt.plot(steps0, final_seq_len0, label="final_seq_len0")
-    plt.plot(steps1, final_seq_len1, label="final_seq_len1")
+    plt.plot(steps0, final_seq_len0, label="without_prefix_caching")
+    plt.plot(steps1, final_seq_len1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_seq_len")
-    plt.title("final_seq_len")
-    plt.savefig(f"{foldername}/final_seq_len.png")
+    plt.ylabel("seq tokens num") 
+    plt.title("seq_len")
+    plt.savefig(f"{foldername}/seq_len.png")
     #关闭当前图
     plt.close()
 
     #将final_prefill_len0, final_prefill_len1画在一张图上
-    plt.plot(steps0, final_prefill_len0, label="final_prefill_len0")
-    plt.plot(steps1, final_prefill_len1, label="final_prefill_len1")
+    plt.plot(steps0, final_prefill_len0, label="without_prefix_caching")
+    plt.plot(steps1, final_prefill_len1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_prefill_len")
-    plt.title("final_prefill_len")
-    plt.savefig(f"{foldername}/final_prefill_len.png")
+    plt.ylabel("prefill tokens num")
+    plt.title("prefill_len")
+    plt.savefig(f"{foldername}/prefill_len.png")
     plt.close()
 
     #将final_decode_len0, final_decode_len1画在一张图上
-    plt.plot(steps0, final_decode_len0, label="final_decode_len0")
-    plt.plot(steps1, final_decode_len1, label="final_decode_len1")
+    plt.plot(steps0, final_decode_len0, label="without_prefix_caching")
+    plt.plot(steps1, final_decode_len1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_decode_len")
-    plt.title("final_decode_len")
-    plt.savefig(f"{foldername}/final_decode_len.png")
+    plt.ylabel("decode tokens num")
+    plt.title("decode_len")
+    plt.savefig(f"{foldername}/decode_len.png")
     plt.close()
     
     #将final_mfu0, final_mfu1画在一张图上
-    plt.plot(steps0, final_pre_mfu0, label="final_mfu0")
-    plt.plot(steps1, final_pre_mfu1, label="final_mfu1")
+    plt.plot(steps0, final_pre_mfu0, label="without_prefix_caching")
+    plt.plot(steps1, final_pre_mfu1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_pre_mfu")
-    plt.title("final_pre_mfu")
-    plt.savefig(f"{foldername}/final_pre_mfu.png")
+    plt.ylabel("hfu")
+    plt.title("hfu")
+    plt.savefig(f"{foldername}/hfu.png")
     plt.close()
 
-    plt.plot(steps0, final_nopre_mfu0, label="final_nopre_mfu0")
-    plt.plot(steps1, final_nopre_mfu1, label="final_nopre_mfu1")
+
+    plt.plot(steps0, final_nopre_mfu0, label="without_prefix_caching")
+    plt.plot(steps1, final_nopre_mfu1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_nopre_mfu")
-    plt.title("final_nopre_mfu")
-    plt.savefig(f"{foldername}/final_nopre_mfu.png")
+    plt.ylabel("mfu")
+    plt.title("mfu")
+    plt.savefig(f"{foldername}/mfu.png")
     plt.close()
 
     #将final_time0, final_time1画在一张图上
-    plt.plot(steps0, final_time0, label="final_time0")
-    plt.plot(steps1, final_time1, label="final_time1")
+    plt.plot(steps0, final_time0, label="without_prefix_caching")
+    plt.plot(steps1, final_time1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_time")
-    plt.title("final_time")
-    plt.savefig(f"{foldername}/final_time.png")
+    plt.ylabel("time/s")
+    plt.title("time")
+    plt.savefig(f"{foldername}/time.png")
     plt.close()
     #将final_unfinished0, final_unfinished1画在一张图上
-    plt.plot(steps0, final_unfinished0, label="final_unfinished0")
-    plt.plot(steps1, final_unfinished1, label="final_unfinished1")
+    plt.plot(steps0, final_unfinished0, label="without_prefix_caching")
+    plt.plot(steps1, final_unfinished1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("final_unfinished")
-    plt.title("final_unfinished")
-    plt.savefig(f"{foldername}/final_unfinished.png")
+    plt.ylabel("unfinished num/total num")
+    plt.title("unfinished problems")
+    plt.savefig(f"{foldername}/unfinished.png")
     plt.close()
 
     
 
 if __name__ == '__main__':
-    test_batch_size = [1]
-    test_n_generate_sample = [1]
-    test_iterations = [10]
-    test_question_range = [1]
+    test_batch_size = [2]
+    test_n_generate_sample = [4]
+    test_iterations = [40]
+    test_question_range = [2]
+    num_few_shots = [0,1]
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
             for iterations in test_iterations:
                 for question_range in test_question_range:
-                    new_params = {
-                        'batch_size': batch_size,
-                        'n_generate_sample': n_generate_sample,
-                        'iterations': iterations,
-                        'question_range': question_range,
-                        'enable_prefix_caching': False,
-                        'best_of': n_generate_sample
-                    }
-                    modify_yaml("configs/mcts_sft.yaml", **new_params)
-                    config = main()
-                    cleanup_dist_env_and_memory()
-                    enable_params = {
-                        'enable_prefix_caching': True
-                    }
-                    modify_yaml("configs/mcts_sft.yaml", **enable_params)
-                    config2 = main()
-                    draw_pic(config)
+                    for num_few_shot in num_few_shots:
+                        new_params = {
+                            'batch_size': batch_size,
+                            'n_generate_sample': n_generate_sample,
+                            'iterations': iterations,
+                            'question_range': question_range,
+                            'enable_prefix_caching': False,
+                            'best_of': n_generate_sample,
+                            "num_few_shot": num_few_shot
+                        }
+                        modify_yaml("configs/mcts_sft.yaml", **new_params)
+                        config = main()
+                        cleanup_dist_env_and_memory()
+                        enable_params = {
+                            'enable_prefix_caching': True
+                        }
+                        modify_yaml("configs/mcts_sft.yaml", **enable_params)
+                        config2 = main()
+                        draw_pic(config)
 
