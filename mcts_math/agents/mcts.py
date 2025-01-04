@@ -220,8 +220,8 @@ class MCTS(SBSREACT):
         if self.config.verbose:
             print(colored(f"{step_result}\n", SOLUTION_COLOR))
         #print到文件中
-        with open(filename, "a") as f:
-            f.write(f"{step_result}\n")
+        #with open(filename, "a") as f:
+        #    f.write(f"{step_result}\n")
 
         # initialize a new node
         new_node = self.create_node(parent=node)
