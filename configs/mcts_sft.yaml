@@ -1,14 +1,14 @@
-batch_size: 2
-best_of: 4
+batch_size: -1
+best_of: 2
 c_puct: 1.25
 enable_prefix_caching: true
 errors_threshold: 3
 few_shot_path: ./mcts_math/few_shots/math_examples.json
-iterations: 40
+iterations: 20
 max_depth: 20
 mode: mcts
 model_dir: ../AlphaMath-7B/
-n_generate_sample: 4
+n_generate_sample: 2
 need_value_func: true
 num_few_shot: 1
 prompt_path: ./mcts_math/few_shots/prompt.json
@@ -26,6 +26,6 @@ stop:
 - </code>
 - </step>
 swap_space: 16
-temperature: 0.1
+temperature: 0.6
 update_leaf_value: false
 verbose: false

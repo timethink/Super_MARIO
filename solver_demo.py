@@ -37,7 +37,7 @@ def parse_args():
 def read_data(file_path):
     with open(file_path, 'r') as f:
         data = json.load(f)
-    return data["final_step"],data["final_seq_len"], data['final_prefill_len'],data['final_decode_len'],data["final_pre_mfu"], data["final_nopre_mfu"],data["final_time"], data["final_unfinished"]
+    return data["step"],data["seq_len"], data['average_prefill_len'],data['average_decode_len'],data["hfu"], data["mfu"],data["time"], data["unfinished"]
 
 def modify_yaml(config_file, **kwargs):
     """
@@ -265,13 +265,13 @@ def draw_pic(config):
             f.write("\n")"""
     #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
     #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
-    steps0,  final_seq_len0, final_prefill_len0, final_decode_len0, final_pre_mfu0, final_nopre_mfu0, final_time0, final_unfinished0 = read_data(datafile0)
-    steps1, final_seq_len1, final_prefill_len1, final_decode_len1, final_pre_mfu1, final_nopre_mfu1, final_time1, final_unfinished1 = read_data(datafile1)
+    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0 = read_data(datafile0)
+    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1 = read_data(datafile1)
     #画图
-    #将final_seq_len0, final_seq_len1画在一张图上
+    #将seq_len0, seq_len1画在一张图上
     
-    plt.plot(steps0, final_seq_len0, label="without_prefix_caching")
-    plt.plot(steps1, final_seq_len1, label="with_prefix_caching")
+    plt.plot(steps0, seq_len0, label="without_prefix_caching")
+    plt.plot(steps1, seq_len1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
     plt.ylabel("seq tokens num") 
@@ -280,19 +280,19 @@ def draw_pic(config):
     #关闭当前图
     plt.close()
 
-    #将final_prefill_len0, final_prefill_len1画在一张图上
-    plt.plot(steps0, final_prefill_len0, label="without_prefix_caching")
-    plt.plot(steps1, final_prefill_len1, label="with_prefix_caching")
+    #将average_prefill_len0, average_prefill_len1画在一张图上
+    plt.plot(steps0, average_prefill_len0, label="without_prefix_caching")
+    plt.plot(steps1, average_prefill_len1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
     plt.ylabel("prefill tokens num")
-    plt.title("prefill_len")
+    plt.title("average prefill_len")
     plt.savefig(f"{foldername}/prefill_len.png")
     plt.close()
 
-    #将final_decode_len0, final_decode_len1画在一张图上
-    plt.plot(steps0, final_decode_len0, label="without_prefix_caching")
-    plt.plot(steps1, final_decode_len1, label="with_prefix_caching")
+    #将average_decode_len0, average_decode_len1画在一张图上
+    plt.plot(steps0, average_decode_len0, label="without_prefix_caching")
+    plt.plot(steps1, average_decode_len1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
     plt.ylabel("decode tokens num")
@@ -301,8 +301,8 @@ def draw_pic(config):
     plt.close()
     
     #将final_mfu0, final_mfu1画在一张图上
-    plt.plot(steps0, final_pre_mfu0, label="without_prefix_caching")
-    plt.plot(steps1, final_pre_mfu1, label="with_prefix_caching")
+    plt.plot(steps0, hfu0, label="without_prefix_caching")
+    plt.plot(steps1, hfu1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
     plt.ylabel("hfu")
@@ -311,8 +311,8 @@ def draw_pic(config):
     plt.close()
 
 
-    plt.plot(steps0, final_nopre_mfu0, label="without_prefix_caching")
-    plt.plot(steps1, final_nopre_mfu1, label="with_prefix_caching")
+    plt.plot(steps0, mfu0, label="without_prefix_caching")
+    plt.plot(steps1, mfu1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
     plt.ylabel("mfu")
@@ -320,33 +320,36 @@ def draw_pic(config):
     plt.savefig(f"{foldername}/mfu.png")
     plt.close()
 
-    #将final_time0, final_time1画在一张图上
-    plt.plot(steps0, final_time0, label="without_prefix_caching")
-    plt.plot(steps1, final_time1, label="with_prefix_caching")
+    #将time0, time1画在一张图上
+    plt.plot(steps0, time0, label="without_prefix_caching")
+    plt.plot(steps1, time1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
     plt.ylabel("time/s")
     plt.title("time")
     plt.savefig(f"{foldername}/time.png")
     plt.close()
-    #将final_unfinished0, final_unfinished1画在一张图上
-    plt.plot(steps0, final_unfinished0, label="without_prefix_caching")
-    plt.plot(steps1, final_unfinished1, label="with_prefix_caching")
+    #将finished0, finished1画在一张图上
+    finished0 = [1 - i for i in unfinished0]
+    finished1 = [1 - i for i in unfinished1]
+    plt.plot(steps0, finished0, label="without_prefix_caching")
+    plt.plot(steps1, finished1, label="with_prefix_caching")
     plt.legend()
     plt.xlabel("step")
-    plt.ylabel("unfinished num/total num")
-    plt.title("unfinished problems")
-    plt.savefig(f"{foldername}/unfinished.png")
+    plt.ylabel("finished num/total num")
+    plt.title("finished problems")
+    plt.savefig(f"{foldername}/finished.png")
     plt.close()
 
     
 
 if __name__ == '__main__':
-    test_batch_size = [2]
-    test_n_generate_sample = [4]
-    test_iterations = [40]
+    test_batch_size = [-1]
+    test_n_generate_sample = [2]
+    test_iterations = [20]
     test_question_range = [2]
     num_few_shots = [0,1]
+
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
             for iterations in test_iterations:

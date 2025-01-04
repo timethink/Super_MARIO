@@ -49,7 +49,7 @@ def calculate_prefill_flops(seq_length: int) -> float:
     vocab_size = 102400
 
     # 估算每次前向传播的 FLOPS 数量
-    flops_per_token = num_hidden_layers * (24 * hidden_size ** 2 + 4 * seq_length * hidden_size) + 2 * hidden_size * vocab_size
+    flops_per_token = num_hidden_layers * (24 * hidden_size ** 2 + 2 * seq_length * hidden_size) + 2 * hidden_size * vocab_size
     flops_per_forward = flops_per_token * seq_length
     
     return flops_per_forward
@@ -302,8 +302,15 @@ class Solver(BaseModel):
             self.generate_sampling_params.best_of = n
             
             #将prompts保存到文件中
-            
-            prompt_filename1 = f"/workspace/MARIO_EVAL/data/runtime_prompt/step_{step}_pre_generate_prompts.json"
+            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            if self.config.enable_prefix_caching:
+                folder_number0 = 1
+            else:
+                folder_number0 = 0
+            #创建foldername1的runtime_prompt文件夹
+            if not os.path.exists(f"{foldername1}/runtime_prompt{folder_number0}"):
+                os.makedirs(f"{foldername1}/runtime_prompt{folder_number0}")
+            prompt_filename1 = f"{foldername1}/runtime_prompt{folder_number0}/step_{step}_pre_generate_prompts.json"
             with open(prompt_filename1, "w") as f:
                 f.write(str(prompts))
                 f.write("\n")
@@ -350,7 +357,7 @@ class Solver(BaseModel):
             pre_mfu = pre_flops_sum / (A100_flops * mfu_time)
             nopre_mfu = nopre_flops_sum / (A100_flops * mfu_time)
             average_prefill_len = prefill_len_sum / request_num
-            average_decode_len = decode_len_sum / request_num
+            average_decode_len = decode_len_sum / (request_num * self.config.n_generate_sample)
             final_step.append(step)
             final_seq_len.append(seq_len)
             final_prefill_len.append(average_prefill_len)
@@ -375,7 +382,15 @@ class Solver(BaseModel):
                 f.write("\n")
             """
             #将初始outputs保存到文件中
-            filename2 = f"/workspace/MARIO_EVAL/data/runtime_output/step_{step}_generate_outputs.json"
+            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            #创建foldername2的runtime_output文件夹
+            if self.config.enable_prefix_caching:
+                folder_number = 1
+            else:
+                folder_number = 0
+            if not os.path.exists(f"{foldername2}/runtime_output{folder_number}"):
+                os.makedirs(f"{foldername2}/runtime_output{folder_number}")
+            filename2 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_outputs.json"
             with open(filename2, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
@@ -606,14 +621,14 @@ class Solver(BaseModel):
 
         #记录时间
         data = {
-            "final_step": final_step,
-            "final_seq_len": final_seq_len,
-            "final_prefill_len": final_prefill_len,
-            "final_decode_len": final_decode_len,
-            "final_pre_mfu": final_pre_mfu,
-            "final_nopre_mfu": final_nopre_mfu,
-            "final_time": final_time,
-            "final_unfinished": final_unfinished
+            "step": final_step,
+            "seq_len": final_seq_len,
+            "average_prefill_len": final_prefill_len,
+            "average_decode_len": final_decode_len,
+            "hfu": final_pre_mfu,
+            "mfu": final_nopre_mfu,
+            "time": final_time,
+            "unfinished": final_unfinished
         }
         #输出为json文件
         data_filename = f"{foldername}/final_data{enable_number}.json"

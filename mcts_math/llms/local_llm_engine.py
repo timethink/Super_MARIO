@@ -29,8 +29,8 @@ def llm_init(config):
         trust_remote_code=True,
         seed=config.seed,
         swap_space=config.swap_space,
-        enable_prefix_caching=config.enable_prefix_caching,
-        disable_log_stats=config.disable_log_stats,#控制是否打印日志
+        enable_prefix_caching=config.enable_prefix_caching
+        #disable_log_stats=config.disable_log_stats,#控制是否打印日志
     )
     sampling_params = SamplingParams(
         temperature=config.temperature,
