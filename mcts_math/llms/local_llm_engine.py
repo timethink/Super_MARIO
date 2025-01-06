@@ -6,7 +6,8 @@ import pynvml
 
 from multiprocessing import Process
 from vllm import LLM, SamplingParams
-
+import sglang as sgl
+import asyncio
 import logging
 logger = logging.getLogger(__name__)
 
@@ -23,15 +24,17 @@ BAR_TIME = 30 # 30
 
 def llm_init(config):
     GPUS = os.environ.get('CUDA_VISIBLE_DEVICES', "0").split(',')
-    llm = LLM(
-        model=config.model_dir, 
-        tensor_parallel_size=len(GPUS), 
+    llm = sgl.Engine(
+        model_path=config.model_dir, 
+        tp_size=len(GPUS), 
         trust_remote_code=True,
-        seed=config.seed,
-        swap_space=config.swap_space,
-        enable_prefix_caching=config.enable_prefix_caching
+        random_seed=config.seed,
+        #swap_space=config.swap_space,
+        disable_radix_cache=(not config.enable_prefix_caching)
+        #enable_metrics = True
         #disable_log_stats=config.disable_log_stats,#控制是否打印日志
     )
+    """
     sampling_params = SamplingParams(
         temperature=config.temperature,
         top_k=config.top_k,
@@ -43,6 +46,17 @@ def llm_init(config):
         stop=config.stop,
         logprobs=True
     )
+    """
+    sampling_params = {
+        "temperature": config.temperature,
+        "top_k": config.top_k,
+        "top_p": config.top_p,
+        #"best_of": config.best_of,
+        "max_new_tokens": config.max_tokens,
+        "n": config.n_generate_sample,
+        "stop": config.stop
+        #"logprobs": True
+    }
     #将sampling_params保存到文件
     sampling_params_file = "/workspace/MARIO_EVAL/data/runtime/sampling_params.yaml"
     with open(sampling_params_file, "w") as f:

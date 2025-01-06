@@ -1,4 +1,4 @@
-batch_size: -1
+batch_size: 32
 best_of: 2
 c_puct: 1.25
 enable_prefix_caching: true
@@ -10,7 +10,7 @@ mode: mcts
 model_dir: ../AlphaMath-7B/
 n_generate_sample: 2
 need_value_func: true
-num_few_shot: 1
+num_few_shot: 4
 prompt_path: ./mcts_math/few_shots/prompt.json
 prompt_wrap: react_sft
 question_range: 2

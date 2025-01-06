@@ -51,18 +51,25 @@ def calculate_prefill_flops(seq_length: int) -> float:
     # 估算每次前向传播的 FLOPS 数量
     flops_per_token = num_hidden_layers * (24 * hidden_size ** 2 + 2 * seq_length * hidden_size) + 2 * hidden_size * vocab_size
     flops_per_forward = flops_per_token * seq_length
+    linear_flops = num_hidden_layers * (24 * hidden_size ** 2 ) * seq_length
+    attention_flops = num_hidden_layers * (2 * seq_length * hidden_size) * seq_length
     
-    return flops_per_forward
+    return flops_per_forward, linear_flops, attention_flops
 
 def calculate_decode_flops( prefill_length: int, seq_length: int) -> float:
     hidden_size = 4096
     num_hidden_layers = 30
     vocab_size = 102400
     flops_per_forward = 0
+    linear_flops = 0
+    attention_flops = 0
     # 估算每次前向传播的 FLOPS 数量
     for i in range(seq_length):
         flops_per_forward += num_hidden_layers * (24 * hidden_size ** 2 + 4 * (prefill_length + i) * hidden_size) + 2 * hidden_size * vocab_size
-    return flops_per_forward
+        linear_flops += num_hidden_layers * (24 * hidden_size ** 2)
+        attention_flops += num_hidden_layers * (4 * (prefill_length + i) * hidden_size)
+
+    return flops_per_forward, linear_flops, attention_flops
 
 
 class Solver(BaseModel):
@@ -114,11 +121,12 @@ class Solver(BaseModel):
             set_seed(self.config.seed)
             print(f"Set seed as {self.config.seed}")
         engine, sampling_params = llm_engine(self.config)
+        #print("here is engine")
         self.engine = engine
         self.generate_sampling_params = sampling_params
         self.value_sampling_params = copy.deepcopy(sampling_params)
-        self.value_sampling_params.max_tokens = 1
-        self.value_sampling_params.n = 1
+        #self.value_sampling_params.max_tokens = 1 #修改添加，暂时注释了
+        #self.value_sampling_params.n = 1
         return partial(
             local_generator,#local_generator是产生输出的函数
             #参见local_llms.py
@@ -271,6 +279,12 @@ class Solver(BaseModel):
         final_nopre_mfu = []
         final_time = []
         final_unfinished = []
+        final_pre_flops = []
+        final_nopre_flops = []
+        final_pre_linear_flops = []
+        final_pre_attention_flops = []
+        final_nopre_linear_flops = []
+        final_nopre_attention_flops = []
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
@@ -298,11 +312,11 @@ class Solver(BaseModel):
                 n = self.config.n_generate_sample * self.config.step_beam_width
             else:
                 n = self.config.n_generate_sample
-            self.generate_sampling_params.n = n
-            self.generate_sampling_params.best_of = n
+            self.generate_sampling_params["n"] = n#修改添加
+            #self.generate_sampling_params.best_of = n
             
             #将prompts保存到文件中
-            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/sglang_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             if self.config.enable_prefix_caching:
                 folder_number0 = 1
             else:
@@ -325,6 +339,7 @@ class Solver(BaseModel):
             outputs = self.llm(prompts, self.generate_sampling_params)
 
             end_time = time.time()
+            #print(outputs)
             #计算outputs中的prompt长度和以及CompletionOutput的token_ids长度和
             request_num = len(outputs)
             prompt_len = 0
@@ -334,20 +349,36 @@ class Solver(BaseModel):
             seq_len = 0
             pre_flops_sum = 0
             nopre_flops_sum = 0
+            pre_linear_flops_sum = 0
+            pre_attention_flops_sum = 0
+            nopre_linear_flops_sum = 0
+            nopre_attention_flops_sum = 0
+            tmp_text = ""
             for output in outputs:
-                prompt_len = len(output.prompt)
-                seq_len += len(output.prompt)
-                prefill_len_sum += prompt_len
-                prefill_flops = calculate_prefill_flops(prompt_len)
+                prompt_len = output["meta_info"]["prompt_tokens"]
+                #prompt_len = len(output.prompt)修改添加
+                if output["text"] != tmp_text:
+                    prefill_flops,prefill_linear_flops,prefill_attention_flops = calculate_prefill_flops(prompt_len)
+                #seq_len += len(output.prompt)
+                    seq_len += prompt_len
+                    prefill_len_sum += prompt_len
+                    pre_flops_sum += prefill_flops
+                    pre_linear_flops_sum += prefill_linear_flops
+                    pre_attention_flops_sum += prefill_attention_flops
+                    tmp_text = output["text"]
                 #prefill_time = output.metrics.first_token_time - output.metrics.first_scheduled_time
-                pre_flops_sum += prefill_flops
-                for completion_output in output.outputs:
-                    decode_len =  len(completion_output.token_ids)
-                    seq_len += decode_len
-                    decode_len_sum += decode_len
-                    decode_flops= calculate_decode_flops(prompt_len, decode_len)   
-                    pre_flops_sum += decode_flops
-                    nopre_flops_sum += decode_flops
+                
+                #decode_len =  len(completion_output.token_ids)
+                decode_len = output["meta_info"]["completion_tokens"]
+                seq_len += decode_len
+                decode_len_sum += decode_len
+                decode_flops,decode_linear_flops,decode_attention_flops = calculate_decode_flops(prompt_len,decode_len)
+                pre_flops_sum += decode_flops
+                pre_linear_flops_sum += decode_linear_flops
+                pre_attention_flops_sum += decode_attention_flops
+                nopre_flops_sum += decode_flops
+                nopre_linear_flops_sum += decode_linear_flops
+                nopre_attention_flops_sum += decode_attention_flops
                 #decode_time = output.metrics.finished_time - output.metrics.first_token_time
                 
             #计算mfu
@@ -366,6 +397,12 @@ class Solver(BaseModel):
             final_nopre_mfu.append(nopre_mfu)
             final_time.append(mfu_time)
             final_unfinished.append(percentage)
+            final_pre_flops.append(pre_flops_sum)
+            final_nopre_flops.append(nopre_flops_sum)
+            final_pre_linear_flops.append(pre_linear_flops_sum)
+            final_pre_attention_flops.append(pre_attention_flops_sum)
+            final_nopre_linear_flops.append(nopre_linear_flops_sum)
+            final_nopre_attention_flops.append(nopre_attention_flops_sum)
             #将batch_size,seq_len,time,mfu,percentage保存到文件中
             """
             mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/step_{step}_mfu.json"
@@ -382,7 +419,7 @@ class Solver(BaseModel):
                 f.write("\n")
             """
             #将初始outputs保存到文件中
-            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/sglang_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             #创建foldername2的runtime_output文件夹
             if self.config.enable_prefix_caching:
                 folder_number = 1
@@ -534,7 +571,7 @@ class Solver(BaseModel):
             plt.savefig(seq_len_pic_filename)
             """
 
-            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/sglang_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             is_enable_prefix_caching = self.config.enable_prefix_caching
             if is_enable_prefix_caching:
                 enable_number = 1
@@ -628,7 +665,13 @@ class Solver(BaseModel):
             "hfu": final_pre_mfu,
             "mfu": final_nopre_mfu,
             "time": final_time,
-            "unfinished": final_unfinished
+            "unfinished": final_unfinished,
+            "pre_flops": final_pre_flops,
+            "nopre_flops": final_nopre_flops,
+            "pre_linear_flops": final_pre_linear_flops,
+            "pre_attention_flops": final_pre_attention_flops,
+            "nopre_linear_flops": final_nopre_linear_flops,
+            "nopre_attention_flops": final_nopre_attention_flops
         }
         #输出为json文件
         data_filename = f"{foldername}/final_data{enable_number}.json"
@@ -660,5 +703,7 @@ class Solver(BaseModel):
         tree_pic_name5 =  f"/workspace/MARIO_EVAL/data/pic_tree/{datetime.now().strftime('%Y%m%d%H%M%S')}_final_tree"        
 
         """
+
+        self.engine.shutdown()
         
     

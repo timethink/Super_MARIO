@@ -1,0 +1,17 @@
+{'text': "<step>\n<p>\nTo find the vertical asymptotes of the given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.\n</p>\n<code>\n```python\nfrom sympy import symbols, solve\n\nx = symbols('x')\ndenominator = x**2 + x - 6\nvertical_asymptotes = solve(denominator, x)\nprint(vertical_asymptotes)\n```", 'meta_info': {'id': '407b413292414ed696a889319824b9b3', 'finish_reason': {'type': 'stop', 'matched': '\n</code>'
+        }, 'prompt_tokens': 34, 'completion_tokens': 148, 'cached_tokens': 0
+    }
+},
+{'text': "<step>\n<p>\nTo find the vertical asymptotes of the graph of $y=\\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.\n</p>\n<code>\n```python\nfrom sympy import symbols, solve\n\nx = symbols('x')\ndenominator = x**2 + x - 6\nvertical_asymptotes = solve(denominator, x)\nprint(vertical_asymptotes)\n```", 'meta_info': {'id': 'f6b442aba2dd416a9b828677c6969a9d', 'finish_reason': {'type': 'stop', 'matched': '\n</code>'
+        }, 'prompt_tokens': 34, 'completion_tokens': 162, 'cached_tokens': 0
+    }
+},
+{'text': '<step>\n<p>\nTo find the positive difference between $120\\%$ of 30 and $130\\%$ of 20, we need to calculate each value and then find the difference.\n</p>\n<code>\n```python\n# Calculate 120% of 30\npercent1 = 1.2\nvalue1 = percent1 * 30\n\n# Calculate 130% of 20\npercent2 = 1.3\nvalue2 = percent2 * 20\n\n# Find the positive difference between the two values\npositive_difference = value1 - value2\nprint(positive_difference)\n```', 'meta_info': {'id': '9eeb6e6a305e45e68c02bda3dd35bc3d', 'finish_reason': {'type': 'stop', 'matched': '\n</code>'
+        }, 'prompt_tokens': 34, 'completion_tokens': 152, 'cached_tokens': 0
+    }
+},
+{'text': '<step>\n<p>\nTo find the positive difference between $120\\%$ of 30 and $130\\%$ of 20, we need to calculate each term separately and then take the difference.\n</p>\n<code>\n```python\n# Calculate 120% of 30\nterm1 = 1.2 * 30\n\n# Calculate 130% of 20\nterm2 = 1.3 * 20\n\n# Calculate the positive difference between the two terms\npositive_difference = term1 - term2\nprint(positive_difference)\n```', 'meta_info': {'id': '9dce8ea78fb24ecaac500ecbf5a1ecf9', 'finish_reason': {'type': 'stop', 'matched': '\n</code>'
+        }, 'prompt_tokens': 34, 'completion_tokens': 141, 'cached_tokens': 0
+    }
+}
+]

@@ -308,9 +308,10 @@ class MCTS(SBSREACT):
                     continue
                 #修改
                 #random_number = np.random.rand()#添加，用来凑数
-                value_estimate = output.value_estimate if output.value_estimate is not None else self.config.negative_reward
-                if output.value_estimate is None:
-                    candidate_node.is_terminal = True
+                #value_estimate = output.value_estimate if output.value_estimate is not None else self.config.negative_reward
+                value_estimate = 0
+                #if output.value_estimate is None:
+                #    candidate_node.is_terminal = True
                 candidate_node.update_recursive(value_estimate, self.root)
                 if self.__class__.is_valid_final_answer_node(candidate_node):
                     self.final_answer_nodes.append(candidate_node)

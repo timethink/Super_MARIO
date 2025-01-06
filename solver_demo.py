@@ -37,7 +37,23 @@ def parse_args():
 def read_data(file_path):
     with open(file_path, 'r') as f:
         data = json.load(f)
-    return data["step"],data["seq_len"], data['average_prefill_len'],data['average_decode_len'],data["hfu"], data["mfu"],data["time"], data["unfinished"]
+    """        data = {
+            "step": final_step,
+            "seq_len": final_seq_len,
+            "average_prefill_len": final_prefill_len,
+            "average_decode_len": final_decode_len,
+            "hfu": final_pre_mfu,
+            "mfu": final_nopre_mfu,
+            "time": final_time,
+            "unfinished": final_unfinished,
+            "pre_flops": final_pre_flops,
+            "nopre_flops": final_nopre_flops,
+            "pre_linear_flops": final_pre_linear_flops,
+            "pre_attention_flops": final_pre_attention_flops,
+            "nopre_linear_flops": final_nopre_linear_flops,
+            "nopre_attention_flops": final_nopre_attention_flops
+        }"""
+    return data["step"],data["seq_len"], data['average_prefill_len'],data['average_decode_len'],data["hfu"], data["mfu"],data["time"], data["unfinished"],data["pre_flops"],data["nopre_flops"],data["pre_linear_flops"],data["pre_attention_flops"],data["nopre_linear_flops"],data["nopre_attention_flops"]
 
 def modify_yaml(config_file, **kwargs):
     """
@@ -127,7 +143,7 @@ def main():
 
 
 
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     if os.path.exists(foldername) and config.enable_prefix_caching == False:
         shutil.rmtree(foldername)
     if not os.path.exists(foldername):
@@ -251,7 +267,7 @@ def main():
 
 def draw_pic(config):
         #输出数据对比文件
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     datafile0 = f"{foldername}/final_data{0}.json"
     datafile1 = f"{foldername}/final_data{1}.json"
     """with open(data_filename, "w") as f:
@@ -265,8 +281,8 @@ def draw_pic(config):
             f.write("\n")"""
     #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
     #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
-    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0 = read_data(datafile0)
-    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1 = read_data(datafile1)
+    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0 = read_data(datafile0)
+    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1 , pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1 = read_data(datafile1)
     #画图
     #将seq_len0, seq_len1画在一张图上
     
@@ -340,15 +356,40 @@ def draw_pic(config):
     plt.title("finished problems")
     plt.savefig(f"{foldername}/finished.png")
     plt.close()
-
+    #将pre_flops0,pre_linear_flops0, pre_attention_flops0, pre_flops1,pre_linear_flops1, pre_attention_flops1画在一张图上
+    #plt.plot(steps0, pre_flops0, label="pre_flops w/o")
+    #plt.plot(steps1, pre_flops1, label="pre_flops w")
+    plt.plot(steps0, pre_linear_flops0, label="hfu_linear_flops w/o")
+    plt.plot(steps1, pre_linear_flops1, label="hfu_linear_flops w")
+    plt.plot(steps0, pre_attention_flops0, label="hfu_attention_flops w/o")
+    plt.plot(steps1, pre_attention_flops1, label="hfu_attention_flops w")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("flops")
+    plt.title("pre_flops")
+    plt.savefig(f"{foldername}/pre_flops.png")
+    plt.close()
+    #将nopre_flops0,nopre_linear_flops0, nopre_attention_flops0, nopre_flops1,nopre_linear_flops1, nopre_attention_flops1画在一张图上
+    #plt.plot(steps0, nopre_flops0, label="nopre_flops w/o")
+    #plt.plot(steps1, nopre_flops1, label="nopre_flops w")
+    plt.plot(steps0, nopre_linear_flops0, label="mfu_linear_flops w/o")
+    plt.plot(steps1, nopre_linear_flops1, label="mfu_linear_flops w")
+    plt.plot(steps0, nopre_attention_flops0, label="mfu_attention_flops w/o")
+    plt.plot(steps1, nopre_attention_flops1, label="mfu_attention_flops w")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("flops")
+    plt.title("nopre_flops")
+    plt.savefig(f"{foldername}/nopre_flops.png")
+    plt.close()
     
 
 if __name__ == '__main__':
-    test_batch_size = [-1]
+    test_batch_size = [32]
     test_n_generate_sample = [2]
     test_iterations = [20]
     test_question_range = [2]
-    num_few_shots = [0,1]
+    num_few_shots = [4]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
