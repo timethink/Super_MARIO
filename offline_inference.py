@@ -12,7 +12,7 @@ from typing import Any, Dict, Type, Optional, List
 from pydantic import BaseModel
 from omegaconf import OmegaConf
 from tqdm import tqdm
-
+from graphviz import Digraph
 from mcts_math.constants import (
     NO_VALID_CHILD, 
     TOO_MANY_STEPS, 
@@ -20,7 +20,7 @@ from mcts_math.constants import (
 )
 from mcts_math.config import BaseConfig
 from mcts_math.agents.utils import math_is_equiv
-
+from transformers import PreTrainedTokenizerFast, PreTrainedTokenizer,AutoTokenizer
 
 class InferNode(BaseModel):
 
@@ -44,7 +44,11 @@ class InferNode(BaseModel):
     children: List[Any] = []
 
     prune: bool = False
-
+    pre_token_num: int = 0#添加，从根节点到当前节点的token数量（不包括当前节点）
+    token_num: int = 0#添加，节点的token数量
+    total_flops: int = 0#添加,表示当前节点在产生child的过程中的flops数量
+    linear_flops: int = 0#添加 
+    attention_flops: int = 0#添加
     def puct(self) -> float:
         q_value = self.q_value if self.visit_count > 0 else 0
         u_value = self.c_puct * self.prior * np.sqrt(self.parent.visit_count) / (1 + self.visit_count)
@@ -197,8 +201,113 @@ def parse_args():
     args = args.parse_args()
     return args
 
+def cal_tree():
+    tree_file_name = "/workspace/MARIO_EVAL/mcts_tree.json"
+    i = 0
+    with open(tree_file_name, "r") as f:
+        for line in f:
+            full_tree_dict = json.loads(line)
+            #建树
+            tree_dict = full_tree_dict["react"]
+            root, tree_depth = rebuild_tree(tree_dict, max_num_children=16, c_puct=1.25)
+            #tree_filename1 = f"/workspace/MARIO_EVAL/data/runtime_tree/question{i}_tree.json"
+            tree_pic_name =  f"/workspace/MARIO_EVAL/data/pic_tree/question{i}_tree"
+            
+            #计算node的token数量
+            get_token_num(root)
+            #计算flops
+            total_flops, linear_flops, attention_flops = calculate_tree_flops(root)
+
+            
+            print(f"question {i} total_flops: {total_flops}, linear_flops: {linear_flops}, attention_flops: {attention_flops}")
+            tree_flops_file = f"/workspace/MARIO_EVAL/data/pic_tree/question{i}_tree_flops.txt"
+            with open(tree_flops_file, "w") as f:
+                #使用科学计数法
+                f.write(f"total_flops: {total_flops:.2e}\n")
+                f.write(f"linear_flops: {linear_flops:.2e}\n")
+                f.write(f"attention_flops: {attention_flops:.2e}\n")
+            draw_tree_pic(root, tree_pic_name)
+            i += 1
+
+def get_token_num(root: Type[InferNode]):
+    #加载tokenizer
+    tokenizer_path = "/workspace/Qwen2.5-Math-7B"
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+    tokenizer.add_special_tokens(
+        {
+            "additional_special_tokens": ['<code>', '<end_of_step>', '<end_of_code>', '<output>', '<end_of_output>', '<answer>', '<end_of_answer>', '<|user|>', '<|assistant|>', '<refine>', '<end_of_refine>', '\n<|assistant|>']
+        },
+        replace_additional_special_tokens=False,
+    )
+    candidates = [root]
+    while candidates:
+        node = candidates.pop(0)
+        text = node.text
+        tokens = tokenizer.tokenize(text)
+        node.token_num = len(tokens)
+        if node.children:
+            for child in node.children:
+                child.pre_token_num = node.pre_token_num + node.token_num
+                candidates.append(child)
+
+
+def draw_tree_pic(root: Type[InferNode], file_name):
+        output_image_path = file_name
+        candidates = [root]
+        states = {}
+        dot = Digraph(comment='MCTS Tree')
+        dot.attr(rankdir='500')
+        while candidates:
+            node = candidates.pop(0)
+            node_label = f"Tag: {node.tag}\nValue: {node.value}\nQ: {node.q_value}\nP: {node.prior}\nVisits: {node.visit_count}\nTotal FLOPS: {node.total_flops:.2e}\n"
+            dot.node(node.tag, node_label)
+            if node.children:
+                for child in node.children:
+                    dot.edge(node.tag, child.tag)
+                candidates.extend(node.children)
+        dot.render(output_image_path, format="png", cleanup=True)
+    
+def calculate_tree_flops(root: Type[InferNode]):
+    candidates = [root]
+    total_flops = 0
+    linear_flops = 0
+    attention_flops = 0
+    while candidates:
+        node = candidates.pop(0)
+        if node.children:
+            for child in node.children:
+                candidates.append(child)
+                tmp_flops, tmp_linear_flops, tmp_attention_flops = calculate_decode_flops(child.pre_token_num, child.token_num)
+                node.total_flops += tmp_flops
+                node.linear_flops += tmp_linear_flops
+                node.attention_flops += tmp_attention_flops
+        total_flops += node.total_flops
+        linear_flops += node.linear_flops
+        attention_flops += node.attention_flops
+    return total_flops, linear_flops, attention_flops
+            
+        
+            
+def calculate_decode_flops( prefill_length: int, seq_length: int) -> float:
+    hidden_size = 3584
+    num_hidden_layers = 28
+    vocab_size = 151680
+    flops_per_forward = 0
+    linear_flops = 0
+    attention_flops = 0
+    # 估算每次前向传播的 FLOPS 数量
+    for i in range(seq_length):
+        flops_per_forward += num_hidden_layers * (24 * hidden_size ** 2 + 4 * (prefill_length + i) * hidden_size) + 2 * hidden_size * vocab_size
+        linear_flops += num_hidden_layers * (24 * hidden_size ** 2)
+        attention_flops += num_hidden_layers * (4 * (prefill_length + i) * hidden_size)
+
+    return flops_per_forward, linear_flops, attention_flops
+
 
 if __name__ == '__main__':
+    cal_tree()
+
+    """
     args = parse_args()
 
     config = OmegaConf.structured(BaseConfig)
@@ -226,3 +335,4 @@ if __name__ == '__main__':
             total += 1
 
     print(cnt, total, f"Accuracy: {cnt / total}")
+    """

@@ -312,11 +312,12 @@ class Solver(BaseModel):
                 n = self.config.n_generate_sample * self.config.step_beam_width
             else:
                 n = self.config.n_generate_sample
-            self.generate_sampling_params["n"] = n#修改添加
-            #self.generate_sampling_params.best_of = n
+            self.generate_sampling_params.n = n
+            #self.generate_sampling_params["n"] = n#sglang修改添加
+            self.generate_sampling_params.best_of = n
             
             #将prompts保存到文件中
-            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/sglang_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/vllm_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             if self.config.enable_prefix_caching:
                 folder_number0 = 1
             else:
@@ -355,31 +356,31 @@ class Solver(BaseModel):
             nopre_attention_flops_sum = 0
             tmp_text = ""
             for output in outputs:
-                prompt_len = output["meta_info"]["prompt_tokens"]
-                #prompt_len = len(output.prompt)修改添加
-                if output["text"] != tmp_text:
-                    prefill_flops,prefill_linear_flops,prefill_attention_flops = calculate_prefill_flops(prompt_len)
+                #prompt_len = output["meta_info"]["prompt_tokens"]#sglang
+                prompt_len = len(output.prompt)#vllm
+                #if output["text"] != tmp_text:#sglang
+                prefill_flops,prefill_linear_flops,prefill_attention_flops = calculate_prefill_flops(prompt_len)
                 #seq_len += len(output.prompt)
-                    seq_len += prompt_len
-                    prefill_len_sum += prompt_len
-                    pre_flops_sum += prefill_flops
-                    pre_linear_flops_sum += prefill_linear_flops
-                    pre_attention_flops_sum += prefill_attention_flops
-                    tmp_text = output["text"]
+                seq_len += prompt_len
+                prefill_len_sum += prompt_len
+                pre_flops_sum += prefill_flops
+                pre_linear_flops_sum += prefill_linear_flops
+                pre_attention_flops_sum += prefill_attention_flops
+                #tmp_text = output["text"]#sglang
                 #prefill_time = output.metrics.first_token_time - output.metrics.first_scheduled_time
-                
-                #decode_len =  len(completion_output.token_ids)
-                decode_len = output["meta_info"]["completion_tokens"]
-                seq_len += decode_len
-                decode_len_sum += decode_len
-                decode_flops,decode_linear_flops,decode_attention_flops = calculate_decode_flops(prompt_len,decode_len)
-                pre_flops_sum += decode_flops
-                pre_linear_flops_sum += decode_linear_flops
-                pre_attention_flops_sum += decode_attention_flops
-                nopre_flops_sum += decode_flops
-                nopre_linear_flops_sum += decode_linear_flops
-                nopre_attention_flops_sum += decode_attention_flops
-                #decode_time = output.metrics.finished_time - output.metrics.first_token_time
+                for completion_output in output.outputs:
+                    decode_len =  len(completion_output.token_ids)
+                    #decode_len = output["meta_info"]["completion_tokens"]
+                    seq_len += decode_len
+                    decode_len_sum += decode_len
+                    decode_flops,decode_linear_flops,decode_attention_flops = calculate_decode_flops(prompt_len,decode_len)
+                    pre_flops_sum += decode_flops
+                    pre_linear_flops_sum += decode_linear_flops
+                    pre_attention_flops_sum += decode_attention_flops
+                    nopre_flops_sum += decode_flops
+                    nopre_linear_flops_sum += decode_linear_flops
+                    nopre_attention_flops_sum += decode_attention_flops
+                    #decode_time = output.metrics.finished_time - output.metrics.first_token_time
                 
             #计算mfu
             mfu_time = end_time - start_time
@@ -419,7 +420,7 @@ class Solver(BaseModel):
                 f.write("\n")
             """
             #将初始outputs保存到文件中
-            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/sglang_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/vllm_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             #创建foldername2的runtime_output文件夹
             if self.config.enable_prefix_caching:
                 folder_number = 1
@@ -571,7 +572,7 @@ class Solver(BaseModel):
             plt.savefig(seq_len_pic_filename)
             """
 
-            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/sglang_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/vllm_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             is_enable_prefix_caching = self.config.enable_prefix_caching
             if is_enable_prefix_caching:
                 enable_number = 1
@@ -704,6 +705,6 @@ class Solver(BaseModel):
 
         """
 
-        self.engine.shutdown()
+        #self.engine.shutdown()
         
     

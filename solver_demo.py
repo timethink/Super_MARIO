@@ -53,7 +53,7 @@ def read_data(file_path):
             "nopre_linear_flops": final_nopre_linear_flops,
             "nopre_attention_flops": final_nopre_attention_flops
         }"""
-    return data["step"],data["seq_len"], data['average_prefill_len'],data['average_decode_len'],data["hfu"], data["mfu"],data["time"], data["unfinished"],data["pre_flops"],data["nopre_flops"],data["pre_linear_flops"],data["pre_attention_flops"],data["nopre_linear_flops"],data["nopre_attention_flops"]
+    return data["step"],data["seq_len"], data['average_prefill_len'],data['average_decode_len'],data["hfu"], data["mfu"],data["time"], data["unfinished"]#,data["pre_flops"],data["nopre_flops"],data["pre_linear_flops"],data["pre_attention_flops"],data["nopre_linear_flops"],data["nopre_attention_flops"]
 
 def modify_yaml(config_file, **kwargs):
     """
@@ -143,7 +143,7 @@ def main():
 
 
 
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     if os.path.exists(foldername) and config.enable_prefix_caching == False:
         shutil.rmtree(foldername)
     if not os.path.exists(foldername):
@@ -267,7 +267,7 @@ def main():
 
 def draw_pic(config):
         #输出数据对比文件
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     datafile0 = f"{foldername}/final_data{0}.json"
     datafile1 = f"{foldername}/final_data{1}.json"
     """with open(data_filename, "w") as f:
@@ -382,14 +382,119 @@ def draw_pic(config):
     plt.title("nopre_flops")
     plt.savefig(f"{foldername}/nopre_flops.png")
     plt.close()
+
+def sglang_vllm_pic():
+    #输出数据对比文件
+    test_batch_size = [32]
+    test_n_generate_sample = [2,4,8,16]
+    test_iterations = [40]
+    test_question_range = [2,4,8,16]
+    num_few_shots = [0,1,2]
+    config = OmegaConf.structured(BaseConfig)
+    for batch_size in test_batch_size:
+        for n_generate_sample in test_n_generate_sample:
+            for iterations in test_iterations:
+                for question_range in test_question_range:
+                    for num_few_shot in num_few_shots:
+                        config.batch_size = batch_size
+                        config.n_generate_sample = n_generate_sample
+                        config.iterations = iterations
+                        config.question_range = question_range
+                        config.num_few_shot = num_few_shot
+                        foldername1 = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+                        foldername2 = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+                        datafile0 = f"{foldername1}/final_data{1}.json"
+                        datafile1 = f"{foldername2}/final_data{1}.json"
+                        """with open(data_filename, "w") as f:
+                                f.write(str(final_seq_len))
+                                f.write("\n")
+                                f.write(str(final_mfu))
+                                f.write("\n")
+                                f.write(str(final_time))
+                                f.write("\n")
+                                f.write(str(final_unfinished))
+                                f.write("\n")"""
+                        #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
+                        #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
+                        steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0 = read_data(datafile0)
+                        steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1  = read_data(datafile1)
+
+                        
+
+                        #将average_prefill_len0, average_prefill_len1画在一张图上
+                        plt.plot(steps0, average_prefill_len0, label="vllm")
+                        plt.plot(steps1, average_prefill_len1, label="sglang")
+                        plt.legend()
+                        plt.xlabel("step")
+                        plt.ylabel("prefill tokens num")
+                        plt.title("average prefill_len")
+                        plt.savefig(f"{foldername2}/compare_prefill_len.png")
+                        plt.close()
+
+                        #将average_decode_len0, average_decode_len1画在一张图上
+                        plt.plot(steps0, average_decode_len0, label="vllm")
+                        plt.plot(steps1, average_decode_len1, label="sglang")
+                        plt.legend()
+                        plt.xlabel("step")
+                        plt.ylabel("decode tokens num")
+                        plt.title("decode_len")
+                        plt.savefig(f"{foldername2}/compare_decode_len.png")
+                        plt.close()
+
+                        
+                        #将final_mfu0, final_mfu1画在一张图上
+                        plt.plot(steps0, hfu0, label="vllm")
+                        plt.plot(steps1, hfu1, label="sglang")
+                        plt.legend()
+                        plt.xlabel("step")
+                        plt.ylabel("hfu")
+                        plt.title("hfu")
+                        plt.savefig(f"{foldername2}/compare_hfu.png")
+                        plt.close()
+
+
+                        #将hfu0, hfu1画在一张图上
+                        plt.plot(steps0, mfu0, label="vllm")
+                        plt.plot(steps1, mfu1, label="sglang")
+                        plt.legend()
+                        plt.xlabel("step")
+                        plt.ylabel("mfu")
+                        plt.title("mfu")
+                        plt.savefig(f"{foldername2}/compare_mfu.png")
+                        plt.close()
+
+                        #将time0, time1画在一张图上
+                        plt.plot(steps0, time0, label="vllm")
+                        plt.plot(steps1, time1, label="sglang")
+                        plt.legend()
+                        plt.xlabel("step")
+                        plt.ylabel("time/s")
+                        plt.title("time")
+                        plt.savefig(f"{foldername2}/compare_time.png")
+                        plt.close()
+
+                        #将finished0, finished1画在一张图上
+                        finished0 = [1 - i for i in unfinished0]
+                        finished1 = [1 - i for i in unfinished1]
+                        plt.plot(steps0, finished0, label="vllm")
+                        plt.plot(steps1, finished1, label="sglang")
+                        plt.legend()
+                        plt.xlabel("step")
+                        plt.ylabel("finished num/total num")
+                        plt.title("finished problems")
+                        plt.savefig(f"{foldername2}/compare_finished.png")
+                        plt.close()
     
 
 if __name__ == '__main__':
+    #sglang_vllm_pic()
+
+    
     test_batch_size = [32]
     test_n_generate_sample = [2]
-    test_iterations = [20]
+    test_iterations = [10]
     test_question_range = [2]
-    num_few_shots = [4]
+    num_few_shots = [0]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
@@ -414,4 +519,4 @@ if __name__ == '__main__':
                         modify_yaml("configs/mcts_sft.yaml", **enable_params)
                         config2 = main()
                         draw_pic(config)
-
+    
