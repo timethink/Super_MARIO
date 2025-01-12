@@ -189,6 +189,10 @@ class BaseConfig:
     disable_log_stats: bool = field(
         default=True, metadata={"help": "disable log stats"}
     )
+    #run_tool选择vllm还是sglang
+    run_tool: Optional[str] = field(
+        default="vllm", metadata={"help": "run vllm or sglang"}
+    )
 
 
 if __name__ == '__main__':

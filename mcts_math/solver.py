@@ -22,7 +22,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 from omegaconf import DictConfig, OmegaConf
 
 from vllm import LLM, SamplingParams
-from vllm.outputs import RequestOutput
+from vllm.outputs import RequestOutput, CompletionOutput
 from pebble import ProcessPool
 from concurrent.futures import TimeoutError
 from .agents.tree import BaseTree
@@ -42,6 +42,144 @@ def set_seed(seed: int = 1024) -> None:
     # Set a fixed value for the hash seed
     os.environ["PYTHONHASHSEED"] = str(seed)
     # logger.info(f"Random seed set as {seed}")
+
+"""
+class RequestOutput:
+    The output data of a completion request to the LLM.
+
+    Args:
+        request_id: The unique ID of the request.
+        prompt: The prompt string of the request.
+                For encoder/decoder models, this is the
+                decoder input prompt.
+        prompt_token_ids: The token IDs of the prompt.
+                          For encoder/decoder models, this is the
+                          decoder input prompt token ids.
+        prompt_logprobs: The log probabilities to return per prompt token.
+        outputs: The output sequences of the request. outputs: List[CompletionOutput],
+        finished: Whether the whole request is finished.
+        metrics: Metrics associated with the request.
+        lora_request: The LoRA request that was used to generate the output.
+        encoder_prompt: The encoder prompt string of the request.
+                        None if decoder-only.
+        encoder_prompt_token_ids: The token IDs of the encoder prompt.
+                                  None if decoder-only.
+        num_cached_tokens: The number of tokens with prefix cache hit.
+
+        def __init__(
+        self,
+        request_id: str,
+        prompt: Optional[str],
+        prompt_token_ids: Optional[List[int]],
+        prompt_logprobs: Optional[PromptLogprobs],
+        outputs: List[CompletionOutput],
+        finished: bool,
+        metrics: Optional[RequestMetrics] = None,
+        lora_request: Optional[LoRARequest] = None,
+        value_estimate: float = None,#添加
+        encoder_prompt: Optional[str] = None,
+        encoder_prompt_token_ids: Optional[List[int]] = None,
+        num_cached_tokens: Optional[int] = None,
+        *,
+        multi_modal_placeholders: Optional[MultiModalPlaceholderDict] = None,
+
+class CompletionOutput:
+    The output data of one completion output of a request.
+
+    Args:
+        index: The index of the output in the request.
+        text: The generated output text.
+        token_ids: The token IDs of the generated output text.
+        cumulative_logprob: The cumulative log probability of the generated
+            output text.
+        logprobs: The log probabilities of the top probability words at each
+            position if the logprobs are requested.
+        finish_reason: The reason why the sequence is finished.
+        stop_reason: The stop string or token id that caused the completion
+            to stop, None if the completion finished for some other reason
+            including encountering the EOS token.
+        lora_request: The LoRA request that was used to generate the output.
+
+    index: int
+    text: str
+    token_ids: GenericSequence[int]
+    cumulative_logprob: Optional[float]
+    logprobs: Optional[SampleLogprobs]
+    finish_reason: Optional[str] = None
+    stop_reason: Union[int, str, None] = None
+    lora_request: Optional[LoRARequest] = None
+    
+"""
+
+def transform_sglang_to_vllm(prompts, outputs, config) -> List[RequestOutput]:
+
+    n_sample = config.n_generate_sample#每个prompt生成的样本数,需要将n_sample个样本合并为一个
+    
+    if len(prompts) * n_sample != len(outputs):
+        raise ValueError("The number of prompts and outputs does not match.")
+    new_request_outputs = []
+    i = 0
+    for prompt in prompts:
+        completion_outputs = []
+        request_id = str(i)
+        request_prompt = prompt
+        
+        finished = True
+        for j in range(n_sample):
+            output = outputs[i*n_sample+j]
+            if j == 0:
+                num_cached_tokens = output["meta_info"]["cached_tokens"]
+                prompt_len = output["meta_info"]["prompt_tokens"]
+                #填充一个长度为prompt_len的list
+                request_prompt_token_ids = [0] * prompt_len
+            completion_index = j
+            completion_text = output["text"]
+            #token_ids暂时随便填充
+            completion_token_num = output["meta_info"]["completion_tokens"]
+            completion_token_ids = [0] * completion_token_num
+            completion_finish_reason = output["meta_info"]["finish_reason"]["type"]
+            #如果没有matched字段，则将stop_reason设置为\n</code>
+            if "matched" not in output["meta_info"]["finish_reason"]:
+                completion_stop_reason = '\n</code>'
+            else:
+                completion_stop_reason = output["meta_info"]["finish_reason"]["matched"]
+            #completion_stop_reason = '\n</code>'
+            new_completion_output = CompletionOutput(
+                    index=completion_index,
+                    text=completion_text,
+                    token_ids=completion_token_ids,
+                    cumulative_logprob=-1,#暂时填充
+                    logprobs=None,
+                    finish_reason=completion_finish_reason,
+                    stop_reason=completion_stop_reason,
+                    lora_request=None
+            )
+            completion_outputs.append(new_completion_output)
+        new_request_output = RequestOutput(
+            request_id=request_id,
+            prompt=request_prompt,
+            prompt_token_ids=request_prompt_token_ids,
+            prompt_logprobs=None,
+            outputs=completion_outputs,
+            finished=finished,
+            metrics=None,
+            lora_request=None,
+            encoder_prompt=None,
+            encoder_prompt_token_ids=None,
+            num_cached_tokens=num_cached_tokens
+        )
+        new_request_outputs.append(new_request_output)
+        i += 1
+    return new_request_outputs
+
+            
+            
+
+
+    
+        
+
+
 
 def calculate_prefill_flops(seq_length: int) -> float:
     hidden_size = 4096
@@ -291,6 +429,7 @@ class Solver(BaseModel):
             #在mcts中，这里的solvers是agents，每个agent包含一个MCTS对象，包括question，ground_truth,current_nodes,candidate_nodes等信息
             #将prompts,prompts_span,valid_solvers,invalid_solvers保存到文件中
             #将处理前的tree打印出来
+            
             """
             tree_filename1 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_pre_tree.json"
             tree_pic_name =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_pre_tree"
@@ -312,12 +451,15 @@ class Solver(BaseModel):
                 n = self.config.n_generate_sample * self.config.step_beam_width
             else:
                 n = self.config.n_generate_sample
-            self.generate_sampling_params.n = n
-            #self.generate_sampling_params["n"] = n#sglang修改添加
-            self.generate_sampling_params.best_of = n
+            
+            if self.config.run_tool == "sglang":
+                self.generate_sampling_params["n"] = n#sglang修改添加
+            else:
+                self.generate_sampling_params.best_of = n#vllm
+                self.generate_sampling_params.n = n#vllm
             
             #将prompts保存到文件中
-            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/vllm_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             if self.config.enable_prefix_caching:
                 folder_number0 = 1
             else:
@@ -340,7 +482,30 @@ class Solver(BaseModel):
             outputs = self.llm(prompts, self.generate_sampling_params)
 
             end_time = time.time()
+
+            #将outputs保存到文件中
+            foldername_output = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            #创建foldername2的runtime_output文件夹
+            if self.config.enable_prefix_caching:
+                folder_number = 1
+            else:
+                folder_number = 0
+            if not os.path.exists(f"{foldername_output}/runtime_output{folder_number}"):
+                os.makedirs(f"{foldername_output}/runtime_output{folder_number}")
+            filename_output = f"{foldername_output}/runtime_output{folder_number}/step_{step}_generate_outputs.json"
+            with open(filename_output, "w") as f:
+                f.write(str(outputs))
+                f.write("\n")
+
             #print(outputs)
+            if self.config.run_tool == "sglang":
+                #将sglang的outputs重构为vllm的outputs
+                new_outputs = transform_sglang_to_vllm(prompts,outputs,self.config)
+            else:
+                new_outputs = outputs
+
+            
+            outputs = new_outputs
             #计算outputs中的prompt长度和以及CompletionOutput的token_ids长度和
             request_num = len(outputs)
             prompt_len = 0
@@ -355,9 +520,34 @@ class Solver(BaseModel):
             nopre_linear_flops_sum = 0
             nopre_attention_flops_sum = 0
             tmp_text = ""
+
+            """
+            if self.config.run_tool == "sglang":
+                for output in outputs:
+                    prompt_len = output["meta_info"]["prompt_tokens"]#sglang
+                    if output["text"] != tmp_text:#sglang
+                        prefill_flops,prefill_linear_flops,prefill_attention_flops = calculate_prefill_flops(prompt_len)
+                        seq_len += prompt_len
+                        prefill_len_sum += prompt_len
+                        pre_flops_sum += prefill_flops
+                        pre_linear_flops_sum += prefill_linear_flops
+                        pre_attention_flops_sum += prefill_attention_flops
+                        tmp_text = output["text"]
+                        decode_len = output["meta_info"]["completion_tokens"]
+                        seq_len += decode_len
+                        decode_len_sum += decode_len
+                        decode_flops,decode_linear_flops,decode_attention_flops = calculate_decode_flops(prompt_len,decode_len)
+                        pre_flops_sum += decode_flops
+                        pre_linear_flops_sum += decode_linear_flops
+                        pre_attention_flops_sum += decode_attention_flops
+                        nopre_flops_sum += decode_flops
+                        nopre_linear_flops_sum += decode_linear_flops
+                        nopre_attention_flops_sum += decode_attention_flops
+            """
+            #else:
             for output in outputs:
                 #prompt_len = output["meta_info"]["prompt_tokens"]#sglang
-                prompt_len = len(output.prompt)#vllm
+                prompt_len = len(output.prompt_token_ids)
                 #if output["text"] != tmp_text:#sglang
                 prefill_flops,prefill_linear_flops,prefill_attention_flops = calculate_prefill_flops(prompt_len)
                 #seq_len += len(output.prompt)
@@ -420,7 +610,7 @@ class Solver(BaseModel):
                 f.write("\n")
             """
             #将初始outputs保存到文件中
-            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/vllm_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             #创建foldername2的runtime_output文件夹
             if self.config.enable_prefix_caching:
                 folder_number = 1
@@ -428,7 +618,7 @@ class Solver(BaseModel):
                 folder_number = 0
             if not os.path.exists(f"{foldername2}/runtime_output{folder_number}"):
                 os.makedirs(f"{foldername2}/runtime_output{folder_number}")
-            filename2 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_outputs.json"
+            filename2 = f"{foldername2}/runtime_output{folder_number}/step_{step}_transform_outputs.json"
             with open(filename2, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
@@ -438,21 +628,32 @@ class Solver(BaseModel):
             # post-process outputs
             #将生成的模型输出 outputs 切分为多个子列表，以便与各个提示 prompts 对应。
             #每个子列表对应一个提示及其相关的生成。
+
+
+            #这里转换修改
+            """
+            outputs = new_outputs
+            filename12 = f"{foldername2}/runtime_output{folder_number}/step_{step}_transform_outputs.json"
+            with open(filename12, "w") as f:
+                f.write(str(outputs))
+                f.write("\n")
+            """
+
             reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
+
             #将reconstructed_outputs保存到文件中
-            #filename3 = f"/workspace/MARIO_EVAL/data/step_{step}_reconstructed_outputs.json"
-            #with open(filename3, "w") as f:
-            #    f.write(str(reconstructed_outputs))
-            #    f.write("\n")
-            #print(reconstructed_outputs)
+            filename5 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_reconstruct.json"
+            with open(filename5, "w") as f:
+                f.write(str(reconstructed_outputs))
+                f.write("\n")
             #这里生成了题目的解答，接下来需要对解答进行处理
             # process output and run python interpreter
             valid_solvers = self.generate_postprocess(reconstructed_outputs, valid_solvers, step)
             #将valid_solvers保存到文件中
-            #filename4 = f"/workspace/MARIO_EVAL/data/step_{step}_valid_solvers.json"
-            #with open(filename4, "w") as f:
-            #    f.write(str(valid_solvers))
-            #    f.write("\n")
+            filename4 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_valid_solvers.json"
+            with open(filename4, "w") as f:
+                f.write(str(valid_solvers))
+                f.write("\n")
             #将处理后的tree打印出来
             """
             tree_filename2 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_post_tree.json"
@@ -572,7 +773,7 @@ class Solver(BaseModel):
             plt.savefig(seq_len_pic_filename)
             """
 
-            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/vllm_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             is_enable_prefix_caching = self.config.enable_prefix_caching
             if is_enable_prefix_caching:
                 enable_number = 1
@@ -704,7 +905,9 @@ class Solver(BaseModel):
         tree_pic_name5 =  f"/workspace/MARIO_EVAL/data/pic_tree/{datetime.now().strftime('%Y%m%d%H%M%S')}_final_tree"        
 
         """
-
-        #self.engine.shutdown()
+        if self.config.run_tool == "sglang":
+            self.engine.shutdown()
+        elif self.config.run_tool == "vllm":
+            del self.engine
         
     

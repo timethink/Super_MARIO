@@ -1,5 +1,5 @@
 batch_size: 32
-best_of: 16
+best_of: 2
 c_puct: 1.25
 enable_prefix_caching: true
 errors_threshold: 3
@@ -8,13 +8,14 @@ iterations: 40
 max_depth: 20
 mode: mcts
 model_dir: ../AlphaMath-7B/
-n_generate_sample: 16
+n_generate_sample: 2
 need_value_func: true
 num_few_shot: 2
 prompt_path: ./mcts_math/few_shots/prompt.json
 prompt_wrap: react_sft
-question_range: 16
+question_range: 2
 result_unwrap: react_sft
+run_tool: vllm
 seed: 42
 step_delim: '
 

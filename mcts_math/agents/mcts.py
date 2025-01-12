@@ -191,6 +191,8 @@ class MCTS(SBSREACT):
               continue  # 跳过当前循环，继续下一个循环
             step_result, parser_result = self.step_unwrap(output.text.strip())
             #print(f"step_result: {step_result}\n")
+            #print(f"parser_result: {parser_result}\n")
+            #print(f"step_result: {step_result}\n")
             #计算token_ids的长度
             token_ids_len = len(output.token_ids)
             children_length += token_ids_len
@@ -344,13 +346,13 @@ class MCTS(SBSREACT):
             ##解析Output，得到prompt_token_ids的长度，并赋给root.token_ids_len
             if current_node == self.root:
                 self.root.token_ids_len = len(output.prompt_token_ids)
-
+            #print("here is OK\n")
             sequence_length += len(output.prompt_token_ids)
             #print("here is loop1")
             #print(f"is_none: {is_none}\n")
             #print(f"output_value_estimate: {output.value_estimate}")
 
-
+            
 
             #value_estimate = output.value_estimate#这里到时候改回来
             #用np的random函数生成一个0-1之间的随机数
@@ -360,7 +362,7 @@ class MCTS(SBSREACT):
             #random_number = random_generator.random()
             #is_none = random_number < 0.2
             value_estimate = random_generator.random()
-    
+            #print(f"value_estimate: {value_estimate}\n")
 
             #打印value_estimate
             #print(f"value_estimate: {value_estimate}\n")
@@ -371,6 +373,7 @@ class MCTS(SBSREACT):
                 current_node.value = value_estimate
                 #print(f"current_node: {current_node}\n")
                 #print(f"curren_node.value: {current_node.value}\n")
+                #print("begin to expand node\n")
                 sequence_length += self.expand_node(output.outputs, current_node)
             else:
                 #print("here is loop4")
