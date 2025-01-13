@@ -77,6 +77,9 @@ def llm_engine(config):
     llm, sampling_params = llm_init(config)
     return llm, sampling_params
 
+def sglang_llm_shutdown(llm):
+    llm.shutdown()
+
 
 def _asyn_llm_engine(config, public_prompts, public_outputs, public_n, task_flag):
     try:

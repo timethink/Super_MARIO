@@ -143,7 +143,7 @@ def main():
 
 
 
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.batch_id}batch_id'
     if os.path.exists(foldername) and config.enable_prefix_caching == False:
         shutil.rmtree(foldername)
     if not os.path.exists(foldername):
@@ -208,6 +208,7 @@ def main():
         #batch_size默认为-1,即只有一个batch,如果batch_size>0,则每个batch的大小为batch_size
         #batch(data, config.batch_size)返回一个生成器,每次生成一个batch的数据
         #由于data是一个列表，每个元素是一个字典，包含问题、答案等信息，所以cur_data是一个包含了多个题目的列表，每个元素是问题，列表长度为batch_size
+        batch_id = 0
         for cur_data in tqdm(batch(data, config.batch_size), desc="Main Processing"):
             agents = [method(config=config, question=d["question"], ground_truth=d["answer"] if config.is_sampling else None) 
                       for d in cur_data]#每个d是一个字典，包含问题、答案等信息
@@ -215,13 +216,18 @@ def main():
             #agents2 = [method(config=config2, question=d["question"], ground_truth=d["answer"] if config.is_sampling else None) 
             #            for d in cur_data]#每个d是一个字典，包含问题、答案等信息
             #agents是一个列表，每个元素是一个agent对象，每个agent对象包含一个method对象，一个question，一个ground_truth，这里的method是MCTS
+            #获取当前是第几个batch
+            
             agent_file = "/workspace/MARIO_EVAL/data/runtime/agent"
             #直接print(agents)到agent_file
             with open(agent_file, "w") as f:
                 f.write(str(agents))
                 f.flush()
+
+            print(f"batch_id: {batch_id}\n")
                 
-            jsonlines = solver.solve(agents)
+            jsonlines = solver.solve(agents, batch_id)
+            batch_id += 1
             #print(jsonlines)
             """
             for d in cur_data:
@@ -231,8 +237,10 @@ def main():
                 writer.flush()
        
              """
+            
     end_time = datetime.now()
     print(f"Time cost: {end_time - start_time}")
+    solver.llm_shutdown()
     return config
     """
     #清楚之前的solver等数据，避免内存溢出
@@ -267,274 +275,279 @@ def main():
 
 def draw_pic(config):
         #输出数据对比文件
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
-    datafile0 = f"{foldername}/final_data{0}.json"
-    datafile1 = f"{foldername}/final_data{1}.json"
-    """with open(data_filename, "w") as f:
-            f.write(str(final_seq_len))
-            f.write("\n")
-            f.write(str(final_mfu))
-            f.write("\n")
-            f.write(str(final_time))
-            f.write("\n")
-            f.write(str(final_unfinished))
-            f.write("\n")"""
-    #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
-    #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
-    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0 = read_data(datafile0)
-    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1 , pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1 = read_data(datafile1)
-    #画图
-    #将seq_len0, seq_len1画在一张图上
-    
-    plt.plot(steps0, seq_len0, label="without_prefix_caching")
-    plt.plot(steps1, seq_len1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("seq tokens num") 
-    plt.title("seq_len")
-    plt.savefig(f"{foldername}/seq_len.png")
-    #关闭当前图
-    plt.close()
+    batch_num = config.question_range // config.batch_size
+    #分多个batch输出数据
+    for batch_id in range(batch_num):
+        foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        datafile0 = f"{foldername}/final_data{0}.json"
+        datafile1 = f"{foldername}/final_data{1}.json"
+        """with open(data_filename, "w") as f:
+                f.write(str(final_seq_len))
+                f.write("\n")
+                f.write(str(final_mfu))
+                f.write("\n")
+                f.write(str(final_time))
+                f.write("\n")
+                f.write(str(final_unfinished))
+                f.write("\n")"""
+        #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
+        #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
+        steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0 = read_data(datafile0)
+        steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1 , pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1 = read_data(datafile1)
+        #画图
+        #将seq_len0, seq_len1画在一张图上
+        
+        plt.plot(steps0, seq_len0, label="without_prefix_caching")
+        plt.plot(steps1, seq_len1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("seq tokens num") 
+        plt.title("seq_len")
+        plt.savefig(f"{foldername}/seq_len.png")
+        #关闭当前图
+        plt.close()
 
-    #将average_prefill_len0, average_prefill_len1画在一张图上
-    plt.plot(steps0, average_prefill_len0, label="without_prefix_caching")
-    plt.plot(steps1, average_prefill_len1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("prefill tokens num")
-    plt.title("average prefill_len")
-    plt.savefig(f"{foldername}/prefill_len.png")
-    plt.close()
+        #将average_prefill_len0, average_prefill_len1画在一张图上
+        plt.plot(steps0, average_prefill_len0, label="without_prefix_caching")
+        plt.plot(steps1, average_prefill_len1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("prefill tokens num")
+        plt.title("average prefill_len")
+        plt.savefig(f"{foldername}/prefill_len.png")
+        plt.close()
 
-    #将average_decode_len0, average_decode_len1画在一张图上
-    plt.plot(steps0, average_decode_len0, label="without_prefix_caching")
-    plt.plot(steps1, average_decode_len1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("decode tokens num")
-    plt.title("decode_len")
-    plt.savefig(f"{foldername}/decode_len.png")
-    plt.close()
-    
-    #将final_mfu0, final_mfu1画在一张图上
-    plt.plot(steps0, hfu0, label="without_prefix_caching")
-    plt.plot(steps1, hfu1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("hfu")
-    plt.title("hfu")
-    plt.savefig(f"{foldername}/hfu.png")
-    plt.close()
+        #将average_decode_len0, average_decode_len1画在一张图上
+        plt.plot(steps0, average_decode_len0, label="without_prefix_caching")
+        plt.plot(steps1, average_decode_len1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("decode tokens num")
+        plt.title("decode_len")
+        plt.savefig(f"{foldername}/decode_len.png")
+        plt.close()
+        
+        #将final_mfu0, final_mfu1画在一张图上
+        plt.plot(steps0, hfu0, label="without_prefix_caching")
+        plt.plot(steps1, hfu1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("hfu")
+        plt.title("hfu")
+        plt.savefig(f"{foldername}/hfu.png")
+        plt.close()
 
 
-    plt.plot(steps0, mfu0, label="without_prefix_caching")
-    plt.plot(steps1, mfu1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("mfu")
-    plt.title("mfu")
-    plt.savefig(f"{foldername}/mfu.png")
-    plt.close()
+        plt.plot(steps0, mfu0, label="without_prefix_caching")
+        plt.plot(steps1, mfu1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("mfu")
+        plt.title("mfu")
+        plt.savefig(f"{foldername}/mfu.png")
+        plt.close()
 
-    #将time0, time1画在一张图上
-    plt.plot(steps0, time0, label="without_prefix_caching")
-    plt.plot(steps1, time1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("time/s")
-    plt.title("time")
-    plt.savefig(f"{foldername}/time.png")
-    plt.close()
-    #将finished0, finished1画在一张图上
-    finished0 = [1 - i for i in unfinished0]
-    finished1 = [1 - i for i in unfinished1]
-    plt.plot(steps0, finished0, label="without_prefix_caching")
-    plt.plot(steps1, finished1, label="with_prefix_caching")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("finished num/total num")
-    plt.title("finished problems")
-    plt.savefig(f"{foldername}/finished.png")
-    plt.close()
-    #将pre_flops0,pre_linear_flops0, pre_attention_flops0, pre_flops1,pre_linear_flops1, pre_attention_flops1画在一张图上
-    #plt.plot(steps0, pre_flops0, label="pre_flops w/o")
-    #plt.plot(steps1, pre_flops1, label="pre_flops w")
-    plt.plot(steps0, pre_linear_flops0, label="hfu_linear_flops w/o")
-    plt.plot(steps1, pre_linear_flops1, label="hfu_linear_flops w")
-    plt.plot(steps0, pre_attention_flops0, label="hfu_attention_flops w/o")
-    plt.plot(steps1, pre_attention_flops1, label="hfu_attention_flops w")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("flops")
-    plt.title("pre_flops")
-    plt.savefig(f"{foldername}/pre_flops.png")
-    plt.close()
-    #将nopre_flops0,nopre_linear_flops0, nopre_attention_flops0, nopre_flops1,nopre_linear_flops1, nopre_attention_flops1画在一张图上
-    #plt.plot(steps0, nopre_flops0, label="nopre_flops w/o")
-    #plt.plot(steps1, nopre_flops1, label="nopre_flops w")
-    plt.plot(steps0, nopre_linear_flops0, label="mfu_linear_flops w/o")
-    plt.plot(steps1, nopre_linear_flops1, label="mfu_linear_flops w")
-    plt.plot(steps0, nopre_attention_flops0, label="mfu_attention_flops w/o")
-    plt.plot(steps1, nopre_attention_flops1, label="mfu_attention_flops w")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("flops")
-    plt.title("nopre_flops")
-    plt.savefig(f"{foldername}/nopre_flops.png")
-    plt.close()
+        #将time0, time1画在一张图上
+        plt.plot(steps0, time0, label="without_prefix_caching")
+        plt.plot(steps1, time1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("time/s")
+        plt.title("time")
+        plt.savefig(f"{foldername}/time.png")
+        plt.close()
+        #将finished0, finished1画在一张图上
+        finished0 = [1 - i for i in unfinished0]
+        finished1 = [1 - i for i in unfinished1]
+        plt.plot(steps0, finished0, label="without_prefix_caching")
+        plt.plot(steps1, finished1, label="with_prefix_caching")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("finished num/total num")
+        plt.title("finished problems")
+        plt.savefig(f"{foldername}/finished.png")
+        plt.close()
+        #将pre_flops0,pre_linear_flops0, pre_attention_flops0, pre_flops1,pre_linear_flops1, pre_attention_flops1画在一张图上
+        #plt.plot(steps0, pre_flops0, label="pre_flops w/o")
+        #plt.plot(steps1, pre_flops1, label="pre_flops w")
+        plt.plot(steps0, pre_linear_flops0, label="hfu_linear_flops w/o")
+        plt.plot(steps1, pre_linear_flops1, label="hfu_linear_flops w")
+        plt.plot(steps0, pre_attention_flops0, label="hfu_attention_flops w/o")
+        plt.plot(steps1, pre_attention_flops1, label="hfu_attention_flops w")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("flops")
+        plt.title("pre_flops")
+        plt.savefig(f"{foldername}/pre_flops.png")
+        plt.close()
+        #将nopre_flops0,nopre_linear_flops0, nopre_attention_flops0, nopre_flops1,nopre_linear_flops1, nopre_attention_flops1画在一张图上
+        #plt.plot(steps0, nopre_flops0, label="nopre_flops w/o")
+        #plt.plot(steps1, nopre_flops1, label="nopre_flops w")
+        plt.plot(steps0, nopre_linear_flops0, label="mfu_linear_flops w/o")
+        plt.plot(steps1, nopre_linear_flops1, label="mfu_linear_flops w")
+        plt.plot(steps0, nopre_attention_flops0, label="mfu_attention_flops w/o")
+        plt.plot(steps1, nopre_attention_flops1, label="mfu_attention_flops w")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("flops")
+        plt.title("nopre_flops")
+        plt.savefig(f"{foldername}/nopre_flops.png")
+        plt.close()
 
 def sglang_vllm_pic(config):
-    foldername1 = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
-    foldername2 = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+    batch_num = config.question_range // config.batch_size
+    #分多个batch输出数据
+    for batch_id in range(batch_num):
+        foldername1 = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        foldername2 = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
 
-    foldername3 = f'/workspace/MARIO_EVAL/data/runtime_data/compare_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+        foldername3 = f'/workspace/MARIO_EVAL/data/runtime_data/compare_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
 
-    if os.path.exists(foldername3):
-        shutil.rmtree(foldername3)
+        if os.path.exists(foldername3):
+            shutil.rmtree(foldername3)
 
-    os.makedirs(foldername3)
+        os.makedirs(foldername3)
 
-    datafile0 = f"{foldername1}/final_data{1}.json"
-    datafile1 = f"{foldername2}/final_data{1}.json"
-    #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
-    #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
-    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0= read_data(datafile0)
-    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1, pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1  = read_data(datafile1)      
+        datafile0 = f"{foldername1}/final_data{1}.json"
+        datafile1 = f"{foldername2}/final_data{1}.json"
+        #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
+        #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
+        steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0= read_data(datafile0)
+        steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1, pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1  = read_data(datafile1)      
 
-    #将average_prefill_len0, average_prefill_len1画在一张图上
-    plt.plot(steps0, average_prefill_len0, label="vllm")
-    plt.plot(steps1, average_prefill_len1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("prefill tokens num")
-    plt.title("average prefill_len")
-    plt.savefig(f"{foldername3}/enable_compare_prefill_len.png")
-    plt.close()
-    #将average_decode_len0, average_decode_len1画在一张图上
-    plt.plot(steps0, average_decode_len0, label="vllm")
-    plt.plot(steps1, average_decode_len1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("decode tokens num")
-    plt.title("decode_len")
-    plt.savefig(f"{foldername3}/enable_compare_decode_len.png")
-    plt.close()  
-    #将final_mfu0, final_mfu1画在一张图上
-    plt.plot(steps0, hfu0, label="vllm")
-    plt.plot(steps1, hfu1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("hfu")
-    plt.title("hfu")
-    plt.savefig(f"{foldername3}/enable_compare_hfu.png")
-    plt.close()
-    #将hfu0, hfu1画在一张图上
-    plt.plot(steps0, mfu0, label="vllm")
-    plt.plot(steps1, mfu1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("mfu")
-    plt.title("mfu")
-    plt.savefig(f"{foldername3}/enable_compare_mfu.png")
-    plt.close()
-    #将time0, time1画在一张图上
-    plt.plot(steps0, time0, label="vllm")
-    plt.plot(steps1, time1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("time/s")
-    plt.title("time")
-    plt.savefig(f"{foldername3}/enable_compare_time.png")
-    plt.close()
-    #将finished0, finished1画在一张图上
-    finished0 = [1 - i for i in unfinished0]
-    finished1 = [1 - i for i in unfinished1]
-    plt.plot(steps0, finished0, label="vllm")
-    plt.plot(steps1, finished1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("finished num/total num")
-    plt.title("finished problems")
-    plt.savefig(f"{foldername3}/enable_compare_finished.png")
-    plt.close()
+        #将average_prefill_len0, average_prefill_len1画在一张图上
+        plt.plot(steps0, average_prefill_len0, label="vllm")
+        plt.plot(steps1, average_prefill_len1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("prefill tokens num")
+        plt.title("average prefill_len")
+        plt.savefig(f"{foldername3}/enable_compare_prefill_len.png")
+        plt.close()
+        #将average_decode_len0, average_decode_len1画在一张图上
+        plt.plot(steps0, average_decode_len0, label="vllm")
+        plt.plot(steps1, average_decode_len1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("decode tokens num")
+        plt.title("decode_len")
+        plt.savefig(f"{foldername3}/enable_compare_decode_len.png")
+        plt.close()  
+        #将final_mfu0, final_mfu1画在一张图上
+        plt.plot(steps0, hfu0, label="vllm")
+        plt.plot(steps1, hfu1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("hfu")
+        plt.title("hfu")
+        plt.savefig(f"{foldername3}/enable_compare_hfu.png")
+        plt.close()
+        #将hfu0, hfu1画在一张图上
+        plt.plot(steps0, mfu0, label="vllm")
+        plt.plot(steps1, mfu1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("mfu")
+        plt.title("mfu")
+        plt.savefig(f"{foldername3}/enable_compare_mfu.png")
+        plt.close()
+        #将time0, time1画在一张图上
+        plt.plot(steps0, time0, label="vllm")
+        plt.plot(steps1, time1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("time/s")
+        plt.title("time")
+        plt.savefig(f"{foldername3}/enable_compare_time.png")
+        plt.close()
+        #将finished0, finished1画在一张图上
+        finished0 = [1 - i for i in unfinished0]
+        finished1 = [1 - i for i in unfinished1]
+        plt.plot(steps0, finished0, label="vllm")
+        plt.plot(steps1, finished1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("finished num/total num")
+        plt.title("finished problems")
+        plt.savefig(f"{foldername3}/enable_compare_finished.png")
+        plt.close()
 
-    #将开关打开前的对比放在vllm中
-    datafile0 = f"{foldername1}/final_data{0}.json"
-    datafile1 = f"{foldername2}/final_data{0}.json"
-    #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
-    #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
-    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0= read_data(datafile0)
-    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1, pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1  = read_data(datafile1)      
+        #将开关打开前的对比放在vllm中
+        datafile0 = f"{foldername1}/final_data{0}.json"
+        datafile1 = f"{foldername2}/final_data{0}.json"
+        #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
+        #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
+        steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0= read_data(datafile0)
+        steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1, pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1  = read_data(datafile1)      
 
-    #将average_prefill_len0, average_prefill_len1画在一张图上
-    plt.plot(steps0, average_prefill_len0, label="vllm")
-    plt.plot(steps1, average_prefill_len1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("prefill tokens num")
-    plt.title("average prefill_len")
-    plt.savefig(f"{foldername3}/without_compare_prefill_len.png")
-    plt.close()
-    #将average_decode_len0, average_decode_len1画在一张图上
-    plt.plot(steps0, average_decode_len0, label="vllm")
-    plt.plot(steps1, average_decode_len1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("decode tokens num")
-    plt.title("decode_len")
-    plt.savefig(f"{foldername3}/without_compare_decode_len.png")
-    plt.close()  
-    #将final_mfu0, final_mfu1画在一张图上
-    plt.plot(steps0, hfu0, label="vllm")
-    plt.plot(steps1, hfu1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("hfu")
-    plt.title("hfu")
-    plt.savefig(f"{foldername3}/without_compare_hfu.png")
-    plt.close()
-    #将hfu0, hfu1画在一张图上
-    plt.plot(steps0, mfu0, label="vllm")
-    plt.plot(steps1, mfu1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("mfu")
-    plt.title("mfu")
-    plt.savefig(f"{foldername3}/without_compare_mfu.png")
-    plt.close()
-    #将time0, time1画在一张图上
-    plt.plot(steps0, time0, label="vllm")
-    plt.plot(steps1, time1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("time/s")
-    plt.title("time")
-    plt.savefig(f"{foldername3}/without_compare_time.png")
-    plt.close()
-    #将finished0, finished1画在一张图上
-    finished0 = [1 - i for i in unfinished0]
-    finished1 = [1 - i for i in unfinished1]
-    plt.plot(steps0, finished0, label="vllm")
-    plt.plot(steps1, finished1, label="sglang")
-    plt.legend()
-    plt.xlabel("step")
-    plt.ylabel("finished num/total num")
-    plt.title("finished problems")
-    plt.savefig(f"{foldername3}/without_compare_finished.png")
-    plt.close()
+        #将average_prefill_len0, average_prefill_len1画在一张图上
+        plt.plot(steps0, average_prefill_len0, label="vllm")
+        plt.plot(steps1, average_prefill_len1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("prefill tokens num")
+        plt.title("average prefill_len")
+        plt.savefig(f"{foldername3}/without_compare_prefill_len.png")
+        plt.close()
+        #将average_decode_len0, average_decode_len1画在一张图上
+        plt.plot(steps0, average_decode_len0, label="vllm")
+        plt.plot(steps1, average_decode_len1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("decode tokens num")
+        plt.title("decode_len")
+        plt.savefig(f"{foldername3}/without_compare_decode_len.png")
+        plt.close()  
+        #将final_mfu0, final_mfu1画在一张图上
+        plt.plot(steps0, hfu0, label="vllm")
+        plt.plot(steps1, hfu1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("hfu")
+        plt.title("hfu")
+        plt.savefig(f"{foldername3}/without_compare_hfu.png")
+        plt.close()
+        #将hfu0, hfu1画在一张图上
+        plt.plot(steps0, mfu0, label="vllm")
+        plt.plot(steps1, mfu1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("mfu")
+        plt.title("mfu")
+        plt.savefig(f"{foldername3}/without_compare_mfu.png")
+        plt.close()
+        #将time0, time1画在一张图上
+        plt.plot(steps0, time0, label="vllm")
+        plt.plot(steps1, time1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("time/s")
+        plt.title("time")
+        plt.savefig(f"{foldername3}/without_compare_time.png")
+        plt.close()
+        #将finished0, finished1画在一张图上
+        finished0 = [1 - i for i in unfinished0]
+        finished1 = [1 - i for i in unfinished1]
+        plt.plot(steps0, finished0, label="vllm")
+        plt.plot(steps1, finished1, label="sglang")
+        plt.legend()
+        plt.xlabel("step")
+        plt.ylabel("finished num/total num")
+        plt.title("finished problems")
+        plt.savefig(f"{foldername3}/without_compare_finished.png")
+        plt.close()
 
     
 
 if __name__ == '__main__':
     #sglang_vllm_pic()
-
     
-    test_batch_size = [32]
+    test_batch_size = [1]
     test_n_generate_sample = [2]
     test_iterations = [40]
-    test_question_range = [2]
+    test_question_range = [4]
     num_few_shots = [0]
-    run_tool = [ "sglang"]
+    run_tool = [ "sglang", "vllm"]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
@@ -554,13 +567,18 @@ if __name__ == '__main__':
                             }
                             modify_yaml("configs/mcts_sft.yaml", **new_params)
                             print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
+                            
+                            
                             config = main()
+                            
                             #cleanup_dist_env_and_memory()
                             enable_params = {
                                 'enable_prefix_caching': True
                             }
+                            
                             modify_yaml("configs/mcts_sft.yaml", **enable_params)
+                            print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
                             config2 = main()
                             draw_pic(config)
-                        #sglang_vllm_pic(config)
+                        sglang_vllm_pic(config)
     

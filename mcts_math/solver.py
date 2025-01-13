@@ -28,7 +28,7 @@ from concurrent.futures import TimeoutError
 from .agents.tree import BaseTree
 import matplotlib.pyplot as plt
 from .llms.local_llms import local_generator, server_generator
-from .llms.local_llm_engine import llm_engine
+from .llms.local_llm_engine import llm_engine,sglang_llm_shutdown
 from .constants import TIMEOUT_SECONDS, ERROR_COLOR
 
 def set_seed(seed: int = 1024) -> None:
@@ -408,7 +408,7 @@ class Solver(BaseModel):
         return invalid_solvers
 
 
-    def solve(self, solvers: List[BaseTree]):
+    def solve(self, solvers: List[BaseTree], batch_id: int):
         final_step = []
         final_seq_len = []
         final_prefill_len = []
@@ -459,15 +459,15 @@ class Solver(BaseModel):
                 self.generate_sampling_params.n = n#vllm
             
             #将prompts保存到文件中
-            foldername1 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example_{batch_id}batch_id"
             if self.config.enable_prefix_caching:
                 folder_number0 = 1
             else:
                 folder_number0 = 0
             #创建foldername1的runtime_prompt文件夹
-            if not os.path.exists(f"{foldername1}/runtime_prompt{folder_number0}"):
-                os.makedirs(f"{foldername1}/runtime_prompt{folder_number0}")
-            prompt_filename1 = f"{foldername1}/runtime_prompt{folder_number0}/step_{step}_pre_generate_prompts.json"
+            if not os.path.exists(f"{foldername}/runtime_prompt{folder_number0}"):
+                os.makedirs(f"{foldername}/runtime_prompt{folder_number0}")
+            prompt_filename1 = f"{foldername}/runtime_prompt{folder_number0}/step_{step}_pre_generate_prompts.json"
             with open(prompt_filename1, "w") as f:
                 f.write(str(prompts))
                 f.write("\n")
@@ -484,7 +484,7 @@ class Solver(BaseModel):
             end_time = time.time()
 
             #将outputs保存到文件中
-            foldername_output = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+
             #创建foldername2的runtime_output文件夹
             if self.config.enable_prefix_caching:
                 folder_number = 1
@@ -613,7 +613,6 @@ class Solver(BaseModel):
                 f.write("\n")
             """
             #将初始outputs保存到文件中
-            foldername2 = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
             #创建foldername2的runtime_output文件夹
             if self.config.enable_prefix_caching:
                 folder_number = 1
@@ -781,7 +780,7 @@ class Solver(BaseModel):
             plt.savefig(seq_len_pic_filename)
             """
 
-            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example"
+      
             is_enable_prefix_caching = self.config.enable_prefix_caching
             if is_enable_prefix_caching:
                 enable_number = 1
@@ -913,9 +912,12 @@ class Solver(BaseModel):
         tree_pic_name5 =  f"/workspace/MARIO_EVAL/data/pic_tree/{datetime.now().strftime('%Y%m%d%H%M%S')}_final_tree"        
 
         """
+    
+    def llm_shutdown(self):
         if self.config.run_tool == "sglang":
             self.engine.shutdown()
         elif self.config.run_tool == "vllm":
-            del self.engine
+            torch.cuda.empty_cache()
+        return True
         
     

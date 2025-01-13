@@ -193,6 +193,10 @@ class BaseConfig:
     run_tool: Optional[str] = field(
         default="vllm", metadata={"help": "run vllm or sglang"}
     )
+    #batch编号
+    batch_id: Optional[int] = field(
+        default=0, metadata={"help": "batch id"}
+    )
 
 
 if __name__ == '__main__':
