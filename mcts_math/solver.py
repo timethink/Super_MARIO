@@ -490,12 +490,15 @@ class Solver(BaseModel):
                 folder_number = 1
             else:
                 folder_number = 0
+            """
             if not os.path.exists(f"{foldername_output}/runtime_output{folder_number}"):
                 os.makedirs(f"{foldername_output}/runtime_output{folder_number}")
+            
             filename_output = f"{foldername_output}/runtime_output{folder_number}/step_{step}_generate_outputs.json"
             with open(filename_output, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
+            """
 
             #print(outputs)
             if self.config.run_tool == "sglang":
@@ -616,12 +619,14 @@ class Solver(BaseModel):
                 folder_number = 1
             else:
                 folder_number = 0
+            """
             if not os.path.exists(f"{foldername2}/runtime_output{folder_number}"):
                 os.makedirs(f"{foldername2}/runtime_output{folder_number}")
             filename2 = f"{foldername2}/runtime_output{folder_number}/step_{step}_transform_outputs.json"
             with open(filename2, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
+            """
             
             """CompletionOutput(index=0, text='<step>\n<p>\nFrom the result, we can see that the vertical asymptotes of the graph of $y=\\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.\n</p>\n<p>\nFinal Answer: $2$\n</p>\n', token_ids=[27, 9215, 29, 185, 27, 79, 29, 185, 4044, 254, 1230, 11, 395, 481, 1019, 344, 254, 10796, 16534, 5671, 280, 254, 4150, 280, 363, 88, 1928, 1122, 90, 17, 1061, 87, 61, 17, 10, 87, 12, 21, 759, 418, 430, 363, 87, 10196, 18, 3, 285, 363, 87, 28, 17, 1332, 185, 535, 79, 29, 185, 27, 79, 29, 185, 19275, 35829, 25, 363, 17, 3, 185, 535, 79, 29, 185, 535, 9215, 29], cumulative_logprob=-0.989820027285532, logprobs=None, finish_reason=stop), CompletionOutput"""
             
@@ -640,20 +645,23 @@ class Solver(BaseModel):
             """
 
             reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
-
+            """
             #将reconstructed_outputs保存到文件中
             filename5 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_reconstruct.json"
             with open(filename5, "w") as f:
                 f.write(str(reconstructed_outputs))
                 f.write("\n")
+            """
             #这里生成了题目的解答，接下来需要对解答进行处理
             # process output and run python interpreter
             valid_solvers = self.generate_postprocess(reconstructed_outputs, valid_solvers, step)
+
+            
             #将valid_solvers保存到文件中
-            filename4 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_valid_solvers.json"
-            with open(filename4, "w") as f:
-                f.write(str(valid_solvers))
-                f.write("\n")
+            #filename4 = f"{foldername2}/runtime_output{folder_number}/step_{step}_generate_valid_solvers.json"
+            #with open(filename4, "w") as f:
+            #    f.write(str(valid_solvers))
+            #    f.write("\n")
             #将处理后的tree打印出来
             """
             tree_filename2 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_post_tree.json"

@@ -386,6 +386,14 @@ def draw_pic(config):
 def sglang_vllm_pic(config):
     foldername1 = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
     foldername2 = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+
+    foldername3 = f'/workspace/MARIO_EVAL/data/runtime_data/compare_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example'
+
+    if os.path.exists(foldername3):
+        shutil.rmtree(foldername3)
+
+    os.makedirs(foldername3)
+
     datafile0 = f"{foldername1}/final_data{1}.json"
     datafile1 = f"{foldername2}/final_data{1}.json"
     #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
@@ -400,7 +408,7 @@ def sglang_vllm_pic(config):
     plt.xlabel("step")
     plt.ylabel("prefill tokens num")
     plt.title("average prefill_len")
-    plt.savefig(f"{foldername2}/compare_prefill_len.png")
+    plt.savefig(f"{foldername3}/enable_compare_prefill_len.png")
     plt.close()
     #将average_decode_len0, average_decode_len1画在一张图上
     plt.plot(steps0, average_decode_len0, label="vllm")
@@ -409,7 +417,7 @@ def sglang_vllm_pic(config):
     plt.xlabel("step")
     plt.ylabel("decode tokens num")
     plt.title("decode_len")
-    plt.savefig(f"{foldername2}/compare_decode_len.png")
+    plt.savefig(f"{foldername3}/enable_compare_decode_len.png")
     plt.close()  
     #将final_mfu0, final_mfu1画在一张图上
     plt.plot(steps0, hfu0, label="vllm")
@@ -418,7 +426,7 @@ def sglang_vllm_pic(config):
     plt.xlabel("step")
     plt.ylabel("hfu")
     plt.title("hfu")
-    plt.savefig(f"{foldername2}/compare_hfu.png")
+    plt.savefig(f"{foldername3}/enable_compare_hfu.png")
     plt.close()
     #将hfu0, hfu1画在一张图上
     plt.plot(steps0, mfu0, label="vllm")
@@ -427,7 +435,7 @@ def sglang_vllm_pic(config):
     plt.xlabel("step")
     plt.ylabel("mfu")
     plt.title("mfu")
-    plt.savefig(f"{foldername2}/compare_mfu.png")
+    plt.savefig(f"{foldername3}/enable_compare_mfu.png")
     plt.close()
     #将time0, time1画在一张图上
     plt.plot(steps0, time0, label="vllm")
@@ -436,7 +444,7 @@ def sglang_vllm_pic(config):
     plt.xlabel("step")
     plt.ylabel("time/s")
     plt.title("time")
-    plt.savefig(f"{foldername2}/compare_time.png")
+    plt.savefig(f"{foldername3}/enable_compare_time.png")
     plt.close()
     #将finished0, finished1画在一张图上
     finished0 = [1 - i for i in unfinished0]
@@ -447,8 +455,74 @@ def sglang_vllm_pic(config):
     plt.xlabel("step")
     plt.ylabel("finished num/total num")
     plt.title("finished problems")
-    plt.savefig(f"{foldername2}/compare_finished.png")
+    plt.savefig(f"{foldername3}/enable_compare_finished.png")
     plt.close()
+
+    #将开关打开前的对比放在vllm中
+    datafile0 = f"{foldername1}/final_data{0}.json"
+    datafile1 = f"{foldername2}/final_data{0}.json"
+    #datafile中分别包含了final_seq_len, final_mfu, final_time, final_unfinished
+    #将两个datafile中的四个数值分别取出，画在同一张图上，得到四个图，横轴为step=[0,1,2,...]
+    steps0,  seq_len0, average_prefill_len0, average_decode_len0, hfu0, mfu0, time0, unfinished0, pre_flops0, nopre_flops0, pre_linear_flops0, pre_attention_flops0, nopre_linear_flops0, nopre_attention_flops0= read_data(datafile0)
+    steps1, seq_len1, average_prefill_len1, average_decode_len1, hfu1, mfu1, time1, unfinished1, pre_flops1, nopre_flops1, pre_linear_flops1, pre_attention_flops1, nopre_linear_flops1, nopre_attention_flops1  = read_data(datafile1)      
+
+    #将average_prefill_len0, average_prefill_len1画在一张图上
+    plt.plot(steps0, average_prefill_len0, label="vllm")
+    plt.plot(steps1, average_prefill_len1, label="sglang")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("prefill tokens num")
+    plt.title("average prefill_len")
+    plt.savefig(f"{foldername3}/without_compare_prefill_len.png")
+    plt.close()
+    #将average_decode_len0, average_decode_len1画在一张图上
+    plt.plot(steps0, average_decode_len0, label="vllm")
+    plt.plot(steps1, average_decode_len1, label="sglang")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("decode tokens num")
+    plt.title("decode_len")
+    plt.savefig(f"{foldername3}/without_compare_decode_len.png")
+    plt.close()  
+    #将final_mfu0, final_mfu1画在一张图上
+    plt.plot(steps0, hfu0, label="vllm")
+    plt.plot(steps1, hfu1, label="sglang")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("hfu")
+    plt.title("hfu")
+    plt.savefig(f"{foldername3}/without_compare_hfu.png")
+    plt.close()
+    #将hfu0, hfu1画在一张图上
+    plt.plot(steps0, mfu0, label="vllm")
+    plt.plot(steps1, mfu1, label="sglang")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("mfu")
+    plt.title("mfu")
+    plt.savefig(f"{foldername3}/without_compare_mfu.png")
+    plt.close()
+    #将time0, time1画在一张图上
+    plt.plot(steps0, time0, label="vllm")
+    plt.plot(steps1, time1, label="sglang")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("time/s")
+    plt.title("time")
+    plt.savefig(f"{foldername3}/without_compare_time.png")
+    plt.close()
+    #将finished0, finished1画在一张图上
+    finished0 = [1 - i for i in unfinished0]
+    finished1 = [1 - i for i in unfinished1]
+    plt.plot(steps0, finished0, label="vllm")
+    plt.plot(steps1, finished1, label="sglang")
+    plt.legend()
+    plt.xlabel("step")
+    plt.ylabel("finished num/total num")
+    plt.title("finished problems")
+    plt.savefig(f"{foldername3}/without_compare_finished.png")
+    plt.close()
+
     
 
 if __name__ == '__main__':
@@ -456,11 +530,11 @@ if __name__ == '__main__':
 
     
     test_batch_size = [32]
-    test_n_generate_sample = [4,16]
+    test_n_generate_sample = [2]
     test_iterations = [40]
-    test_question_range = [4,16]
-    num_few_shots = [0,1,2]
-    run_tool = [ "sglang", "vllm"]
+    test_question_range = [2]
+    num_few_shots = [0]
+    run_tool = [ "sglang"]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
@@ -488,5 +562,5 @@ if __name__ == '__main__':
                             modify_yaml("configs/mcts_sft.yaml", **enable_params)
                             config2 = main()
                             draw_pic(config)
-                        sglang_vllm_pic(config)
+                        #sglang_vllm_pic(config)
     
