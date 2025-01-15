@@ -142,12 +142,12 @@ def main():
     os.makedirs(folder_path3)
 
 
-
-    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.batch_id}batch_id'
-    if os.path.exists(foldername) and config.enable_prefix_caching == False:
-        shutil.rmtree(foldername)
-    if not os.path.exists(foldername):
-        os.makedirs(foldername)
+    for batch_id in range(question_range // config.batch_size):
+        foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        #if os.path.exists(foldername) and config.enable_prefix_caching == False:
+        #    shutil.rmtree(foldername)
+        if not os.path.exists(foldername):
+            os.makedirs(foldername)
     
     #修改
 
@@ -240,6 +240,10 @@ def main():
             
     end_time = datetime.now()
     print(f"Time cost: {end_time - start_time}")
+    log_filename = "/workspace/MARIO_EVAL/data/time_stats.txt"
+    with open(log_filename, "a") as f:
+        f.write(f"context: {config}\n")
+        f.write(f"Time cost: {end_time - start_time}\n")
     solver.llm_shutdown()
     return config
     """
@@ -542,12 +546,12 @@ def sglang_vllm_pic(config):
 if __name__ == '__main__':
     #sglang_vllm_pic()
     
-    test_batch_size = [1]
-    test_n_generate_sample = [2]
+    test_batch_size = [32]
+    test_n_generate_sample = [16]
     test_iterations = [40]
-    test_question_range = [4]
-    num_few_shots = [0]
-    run_tool = [ "sglang", "vllm"]
+    test_question_range = [128]
+    num_few_shots = [1]
+    run_tool = ["vllm"]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
@@ -578,7 +582,7 @@ if __name__ == '__main__':
                             
                             modify_yaml("configs/mcts_sft.yaml", **enable_params)
                             print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
-                            config2 = main()
+                            #config2 = main()
                             draw_pic(config)
                         sglang_vllm_pic(config)
     

@@ -28,7 +28,7 @@ from concurrent.futures import TimeoutError
 from .agents.tree import BaseTree
 import matplotlib.pyplot as plt
 from .llms.local_llms import local_generator, server_generator
-from .llms.local_llm_engine import llm_engine,sglang_llm_shutdown
+from .llms.local_llm_engine import llm_engine
 from .constants import TIMEOUT_SECONDS, ERROR_COLOR
 
 def set_seed(seed: int = 1024) -> None:
@@ -865,30 +865,30 @@ class Solver(BaseModel):
             plt.savefig(seq_mfu_filename)
             """
 
-        #记录时间
-        data = {
-            "step": final_step,
-            "seq_len": final_seq_len,
-            "average_prefill_len": final_prefill_len,
-            "average_decode_len": final_decode_len,
-            "hfu": final_pre_mfu,
-            "mfu": final_nopre_mfu,
-            "time": final_time,
-            "unfinished": final_unfinished,
-            "pre_flops": final_pre_flops,
-            "nopre_flops": final_nopre_flops,
-            "pre_linear_flops": final_pre_linear_flops,
-            "pre_attention_flops": final_pre_attention_flops,
-            "nopre_linear_flops": final_nopre_linear_flops,
-            "nopre_attention_flops": final_nopre_attention_flops
-        }
-        #输出为json文件
-        data_filename = f"{foldername}/final_data{enable_number}.json"
-        #如果文件存在，则删除
-        #if os.path.exists(data_filename):
-        #    os.remove(data_filename)
-        with open(data_filename, "w") as f:
-            json.dump(data, f, indent=4)
+            #记录时间
+            data = {
+                "step": final_step,
+                "seq_len": final_seq_len,
+                "average_prefill_len": final_prefill_len,
+                "average_decode_len": final_decode_len,
+                "hfu": final_pre_mfu,
+                "mfu": final_nopre_mfu,
+                "time": final_time,
+                "unfinished": final_unfinished,
+                "pre_flops": final_pre_flops,
+                "nopre_flops": final_nopre_flops,
+                "pre_linear_flops": final_pre_linear_flops,
+                "pre_attention_flops": final_pre_attention_flops,
+                "nopre_linear_flops": final_nopre_linear_flops,
+                "nopre_attention_flops": final_nopre_attention_flops
+            }
+            #输出为json文件
+            data_filename = f"{foldername}/final_data{enable_number}.json"
+            #如果文件存在，则删除
+            #if os.path.exists(data_filename):
+            #    os.remove(data_filename)
+            with open(data_filename, "w") as f:
+                json.dump(data, f, indent=4)
         """
         mfu_pic_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu"
         #画出final_seq_len和final_mfu随step的变化图，在同一个图中
