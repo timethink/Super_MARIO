@@ -551,7 +551,7 @@ if __name__ == '__main__':
     test_iterations = [40]
     test_question_range = [128]
     num_few_shots = [1]
-    run_tool = ["vllm"]
+    run_tool = ["sglang"]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
@@ -573,7 +573,7 @@ if __name__ == '__main__':
                             print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
                             
                             
-                            config = main()
+                            #config = main()
                             
                             #cleanup_dist_env_and_memory()
                             enable_params = {
@@ -582,7 +582,7 @@ if __name__ == '__main__':
                             
                             modify_yaml("configs/mcts_sft.yaml", **enable_params)
                             print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
-                            #config2 = main()
-                            draw_pic(config)
-                        sglang_vllm_pic(config)
+                            config2 = main()
+                            draw_pic(config2)
+                        sglang_vllm_pic(config2)
     

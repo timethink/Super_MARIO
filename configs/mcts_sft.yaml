@@ -16,7 +16,7 @@ prompt_path: ./mcts_math/few_shots/prompt.json
 prompt_wrap: react_sft
 question_range: 128
 result_unwrap: react_sft
-run_tool: vllm
+run_tool: sglang
 seed: 42
 step_delim: '
 
