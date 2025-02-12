@@ -358,15 +358,13 @@ class MCTS(SBSREACT):
 
             
 
-            value_estimate = output.value_estimate#这里到时候改回来
-            print(f"generate value_estimate: {value_estimate}\n")
+            #value_estimate = output.value_estimate#这里到时候改回来
+            #print(f"generate value_estimate: {value_estimate}\n")
             #用np的random函数生成一个0-1之间的随机数
             
-            #seed_value = current_node.token_ids_len
-            #random_generator = np.random.default_rng(seed_value)
-            #random_number = random_generator.random()
-            #is_none = random_number < 0.2
-            #value_estimate = random_generator.random()
+            seed_value = current_node.token_ids_len
+            random_generator = np.random.default_rng(seed_value)
+            value_estimate = random_generator.random()
             #print(f"value_estimate: {value_estimate}\n")
 
             #打印value_estimate
@@ -378,7 +376,7 @@ class MCTS(SBSREACT):
                 current_node.value = value_estimate
                 
                 #print(f"current_node: {current_node}\n")
-                print(f"curren_node.value: {current_node.value}\n")
+                #print(f"curren_node.value: {current_node.value}\n")
                 #print("begin to expand node\n")
                 sequence_length += self.expand_node(output.outputs, current_node)
             else:

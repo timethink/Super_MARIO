@@ -546,11 +546,11 @@ def sglang_vllm_pic(config):
 if __name__ == '__main__':
     #sglang_vllm_pic()
     
-    test_batch_size = [-1]
-    test_n_generate_sample = [8]
-    test_iterations = [10]
-    test_question_range = [2]
-    num_few_shots = [0]
+    test_batch_size = [32,16,8]
+    test_n_generate_sample = [4,8,16]
+    test_iterations = [40]
+    test_question_range = [16,32]
+    num_few_shots = [0,1]
     run_tool = ["sglang"]
 
     for batch_size in test_batch_size:
@@ -574,6 +574,9 @@ if __name__ == '__main__':
                             
                             
                             config = main()
+                            torch.cuda.empty_cache()
+                            #清除cache
+
                             
                             #cleanup_dist_env_and_memory()
                             #enable_params = {

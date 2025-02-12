@@ -424,6 +424,11 @@ class Solver(BaseModel):
         final_nopre_linear_flops = []
         final_nopre_attention_flops = []
         final_cache_hit_rate = []
+
+        #先删除/workspace/Super_MARIO/cache_hit_rate.txt文件
+        if os.path.exists("/workspace/Super_MARIO/cache_hit_rate.txt"):
+            os.remove("/workspace/Super_MARIO/cache_hit_rate.txt")
+
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
@@ -500,6 +505,7 @@ class Solver(BaseModel):
                 f.write(str(outputs))
                 f.write("\n")
             """
+            
 
             #print(outputs)
             if self.config.run_tool == "sglang":
@@ -586,11 +592,12 @@ class Solver(BaseModel):
             average_decode_len = decode_len_sum / (request_num * self.config.n_generate_sample)
 
             #读取/workspace/Super_MARIO/cache_hit_rate.txt文件得到cache_hit_rate
+
+            final_cache_hit_rate = []
             with open("/workspace/Super_MARIO/cache_hit_rate.txt", "r") as f:
                 for line in f:
                     final_cache_hit_rate.append(float(line))
-            #读完后删除文件
-            os.remove("/workspace/Super_MARIO/cache_hit_rate.txt")
+
 
 
             final_step.append(step)
@@ -894,7 +901,7 @@ class Solver(BaseModel):
             plt.ylabel('cache_hit_rate')
             plt.savefig(cache_hit_rate_pic_filename)
             plt.close()
-            
+
 
             #记录时间
             data = {
