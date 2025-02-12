@@ -546,11 +546,11 @@ def sglang_vllm_pic(config):
 if __name__ == '__main__':
     #sglang_vllm_pic()
     
-    test_batch_size = [32]
-    test_n_generate_sample = [16]
-    test_iterations = [40]
-    test_question_range = [128]
-    num_few_shots = [1]
+    test_batch_size = [-1]
+    test_n_generate_sample = [8]
+    test_iterations = [10]
+    test_question_range = [2]
+    num_few_shots = [0]
     run_tool = ["sglang"]
 
     for batch_size in test_batch_size:
@@ -564,7 +564,7 @@ if __name__ == '__main__':
                                 'n_generate_sample': n_generate_sample,
                                 'iterations': iterations,
                                 'question_range': question_range,
-                                'enable_prefix_caching': False,
+                                'enable_prefix_caching': True,
                                 'best_of': n_generate_sample,
                                 "num_few_shot": num_few_shot,
                                 "run_tool": tool
@@ -573,16 +573,16 @@ if __name__ == '__main__':
                             print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
                             
                             
-                            #config = main()
+                            config = main()
                             
                             #cleanup_dist_env_and_memory()
-                            enable_params = {
-                                'enable_prefix_caching': True
-                            }
+                            #enable_params = {
+                            #    'enable_prefix_caching': True
+                            #}
                             
-                            modify_yaml("configs/mcts_sft.yaml", **enable_params)
-                            print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
-                            config2 = main()
-                            draw_pic(config2)
-                        sglang_vllm_pic(config2)
+                            #modify_yaml("configs/mcts_sft.yaml", **enable_params)
+                            #print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
+                            #config2 = main()
+                            #draw_pic(config)
+                        #sglang_vllm_pic(config)
     

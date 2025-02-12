@@ -423,6 +423,7 @@ class Solver(BaseModel):
         final_pre_attention_flops = []
         final_nopre_linear_flops = []
         final_nopre_attention_flops = []
+        final_cache_hit_rate = []
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
@@ -583,6 +584,15 @@ class Solver(BaseModel):
             nopre_mfu = nopre_flops_sum / (A100_flops * mfu_time)
             average_prefill_len = prefill_len_sum / request_num
             average_decode_len = decode_len_sum / (request_num * self.config.n_generate_sample)
+
+            #读取/workspace/Super_MARIO/cache_hit_rate.txt文件得到cache_hit_rate
+            with open("/workspace/Super_MARIO/cache_hit_rate.txt", "r") as f:
+                for line in f:
+                    final_cache_hit_rate.append(float(line))
+            #读完后删除文件
+            os.remove("/workspace/Super_MARIO/cache_hit_rate.txt")
+
+
             final_step.append(step)
             final_seq_len.append(seq_len)
             final_prefill_len.append(average_prefill_len)
@@ -597,6 +607,8 @@ class Solver(BaseModel):
             final_pre_attention_flops.append(pre_attention_flops_sum)
             final_nopre_linear_flops.append(nopre_linear_flops_sum)
             final_nopre_attention_flops.append(nopre_attention_flops_sum)
+
+            
             #将batch_size,seq_len,time,mfu,percentage保存到文件中
             """
             mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/step_{step}_mfu.json"
@@ -618,14 +630,14 @@ class Solver(BaseModel):
                 folder_number = 1
             else:
                 folder_number = 0
-            """
-            if not os.path.exists(f"{foldername2}/runtime_output{folder_number}"):
-                os.makedirs(f"{foldername2}/runtime_output{folder_number}")
-            filename2 = f"{foldername2}/runtime_output{folder_number}/step_{step}_transform_outputs.json"
+            
+            if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
+                os.makedirs(f"{foldername}/runtime_output{folder_number}")
+            filename2 = f"{foldername}/runtime_output{folder_number}/step_{step}_transform_outputs.json"
             with open(filename2, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
-            """
+            
             
             """CompletionOutput(index=0, text='<step>\n<p>\nFrom the result, we can see that the vertical asymptotes of the graph of $y=\\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.\n</p>\n<p>\nFinal Answer: $2$\n</p>\n', token_ids=[27, 9215, 29, 185, 27, 79, 29, 185, 4044, 254, 1230, 11, 395, 481, 1019, 344, 254, 10796, 16534, 5671, 280, 254, 4150, 280, 363, 88, 1928, 1122, 90, 17, 1061, 87, 61, 17, 10, 87, 12, 21, 759, 418, 430, 363, 87, 10196, 18, 3, 285, 363, 87, 28, 17, 1332, 185, 535, 79, 29, 185, 27, 79, 29, 185, 19275, 35829, 25, 363, 17, 3, 185, 535, 79, 29, 185, 535, 9215, 29], cumulative_logprob=-0.989820027285532, logprobs=None, finish_reason=stop), CompletionOutput"""
             
@@ -679,6 +691,12 @@ class Solver(BaseModel):
             prompts, prompts_span = self.value_preprocess(valid_solvers)
             #将prompts和prompts_span保存到文件中
             #奇怪，这里为什么prompts和prompts_span是空的？
+            if not os.path.exists(f"{foldername}/runtime_prompt{folder_number}"):
+                os.makedirs(f"{foldername}/runtime_prompt{folder_number}")
+            prevalue_filename = f"{foldername}/runtime_prompt{folder_number}/step_{step}_prevalue_prompt.json"
+            with open(prevalue_filename, "w") as f:
+                f.write(str(prompts))
+                f.write("\n")
             """
             filename5 = f"/workspace/MARIO_EVAL/data/step_{step}_prevalue_prompts.json"
             with open(filename5, "w") as f:
@@ -701,12 +719,14 @@ class Solver(BaseModel):
                 """
                 outputs = self.llm(prompts, self.value_sampling_params)
                 #将初始outputs保存到文件中
-                """
-                filename6 = f"/workspace/MARIO_EVAL/data/runtime_output/step_{step}_value_outputs.json"
-                with open(filename6, "w") as f:
+                
+                if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
+                    os.makedirs(f"{foldername}/runtime_output{folder_number}")
+                value_filename = f"{foldername}/runtime_output{folder_number}/step_{step}_value_outputs.json"
+                with open(value_filename, "w") as f:
                     f.write(str(outputs))
                     f.write("\n")
-                """
+                
                 reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
             else:
                 reconstructed_outputs = [None] * (len(prompts_span) - 1)
@@ -865,6 +885,17 @@ class Solver(BaseModel):
             plt.savefig(seq_mfu_filename)
             """
 
+            #画出cache_hit_rate的变化图
+            cache_hit_rate_pic_filename = f"{foldername}/final_cache_hit_rate{enable_number}"
+            plt.figure()
+            cache_x = [i for i in range(len(final_cache_hit_rate))]
+            plt.plot(cache_x, final_cache_hit_rate)
+            plt.xlabel('batch')
+            plt.ylabel('cache_hit_rate')
+            plt.savefig(cache_hit_rate_pic_filename)
+            plt.close()
+            
+
             #记录时间
             data = {
                 "step": final_step,
@@ -880,7 +911,8 @@ class Solver(BaseModel):
                 "pre_linear_flops": final_pre_linear_flops,
                 "pre_attention_flops": final_pre_attention_flops,
                 "nopre_linear_flops": final_nopre_linear_flops,
-                "nopre_attention_flops": final_nopre_attention_flops
+                "nopre_attention_flops": final_nopre_attention_flops,
+                "cache_hit_rate": final_cache_hit_rate
             }
             #输出为json文件
             data_filename = f"{foldername}/final_data{enable_number}.json"

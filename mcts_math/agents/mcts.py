@@ -303,6 +303,7 @@ class MCTS(SBSREACT):
         """
         self.current_nodes = []
         if outputs is not None:
+            #print(f"outputs: {outputs}\n")
             for candidate_node, output in zip(self.candidate_nodes, outputs):
                 # assert self.question in output.prompt
                 # backup
@@ -312,8 +313,11 @@ class MCTS(SBSREACT):
                 #random_number = np.random.rand()#添加，用来凑数
                 #value_estimate = output.value_estimate if output.value_estimate is not None else self.config.negative_reward
                 value_estimate = 0
+                #print(f"value_estimate: {value_estimate}\n")
+                #value_estimate = 0
                 #if output.value_estimate is None:
                 #    candidate_node.is_terminal = True
+                #    print("here is None\n")
                 candidate_node.update_recursive(value_estimate, self.root)
                 if self.__class__.is_valid_final_answer_node(candidate_node):
                     self.final_answer_nodes.append(candidate_node)
@@ -354,14 +358,15 @@ class MCTS(SBSREACT):
 
             
 
-            #value_estimate = output.value_estimate#这里到时候改回来
+            value_estimate = output.value_estimate#这里到时候改回来
+            print(f"generate value_estimate: {value_estimate}\n")
             #用np的random函数生成一个0-1之间的随机数
             
-            seed_value = current_node.token_ids_len
-            random_generator = np.random.default_rng(seed_value)
+            #seed_value = current_node.token_ids_len
+            #random_generator = np.random.default_rng(seed_value)
             #random_number = random_generator.random()
             #is_none = random_number < 0.2
-            value_estimate = random_generator.random()
+            #value_estimate = random_generator.random()
             #print(f"value_estimate: {value_estimate}\n")
 
             #打印value_estimate
@@ -371,8 +376,9 @@ class MCTS(SBSREACT):
             #if not is_none or current_node == self.root:
                 #print("here is loop3")
                 current_node.value = value_estimate
+                
                 #print(f"current_node: {current_node}\n")
-                #print(f"curren_node.value: {current_node.value}\n")
+                print(f"curren_node.value: {current_node.value}\n")
                 #print("begin to expand node\n")
                 sequence_length += self.expand_node(output.outputs, current_node)
             else:

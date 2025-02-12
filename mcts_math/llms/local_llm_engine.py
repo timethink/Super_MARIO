@@ -51,8 +51,9 @@ def llm_init(config):
             trust_remote_code=True,
             random_seed=config.seed,
             #swap_space=config.swap_space,
-            disable_radix_cache=(not config.enable_prefix_caching)
-            #enable_metrics = True
+            disable_radix_cache=(not config.enable_prefix_caching),
+            dtype="bfloat16",
+            enable_metrics = True,
             #disable_log_stats=config.disable_log_stats,#控制是否打印日志
         )
         sampling_params = {#sglang设置
