@@ -423,14 +423,35 @@ class Solver(BaseModel):
         final_pre_attention_flops = []
         final_nopre_linear_flops = []
         final_nopre_attention_flops = []
-        final_cache_hit_rate = []
+        
 
-        #先删除/workspace/Super_MARIO/cache_hit_rate.txt文件
+        #先删除已有的一些包含cache信息的文件
         if os.path.exists("/workspace/Super_MARIO/cache_hit_rate.txt"):
             os.remove("/workspace/Super_MARIO/cache_hit_rate.txt")
+        if os.path.exists("/workspace/Super_MARIO/current_batch_cache_hit_rate.txt"):
+            os.remove("/workspace/Super_MARIO/current_batch_cache_hit_rate.txt")
+        
+        if os.path.exists("/workspace/Super_MARIO/cache_info.txt"):
+            os.remove("/workspace/Super_MARIO/cache_info.txt")
+
+        if os.path.exists("/workspace/Super_MARIO/tree_cache.txt"):
+            os.remove("/workspace/Super_MARIO/tree_cache.txt")
+        
+        if os.path.exists("/workspace/Super_MARIO/max_fill_ids.txt"):
+            os.remove("/workspace/Super_MARIO/max_fill_ids.txt")
+        
 
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
+            #将当前是第几个step保存到cache_info.txt文件中
+            with open("/workspace/Super_MARIO/cache_info.txt", "a") as f:
+                f.write("\n")
+                f.write(f"current step:{step}\n")
+                f.write("\n")
+            with open("/workspace/Super_MARIO/tree_cache.txt", "a") as f:
+                f.write("\n")
+                f.write(f"current step:{step}\n")
+                f.write("\n")
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
             #在mcts中，这里的solvers是agents，每个agent包含一个MCTS对象，包括question，ground_truth,current_nodes,candidate_nodes等信息
             #将prompts,prompts_span,valid_solvers,invalid_solvers保存到文件中
@@ -465,7 +486,7 @@ class Solver(BaseModel):
                 self.generate_sampling_params.n = n#vllm
             
             #将prompts保存到文件中
-            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example_{batch_id}batch_id"
+            foldername = f"/workspace/MARIO_EVAL/data/runtime_data/{self.config.run_tool}_{self.config.batch_size}b_{self.config.n_generate_sample}sample_{self.config.iterations}iter_{self.config.question_range}_qaf_{self.config.num_few_shot}example_{self.config.mem_fraction_static}mem_{batch_id}batch_id"
             if self.config.enable_prefix_caching:
                 folder_number0 = 1
             else:
@@ -597,6 +618,11 @@ class Solver(BaseModel):
             with open("/workspace/Super_MARIO/cache_hit_rate.txt", "r") as f:
                 for line in f:
                     final_cache_hit_rate.append(float(line))
+                
+            final_batch_cache_hit_rate = []
+            with open("/workspace/Super_MARIO/current_batch_cache_hit_rate.txt", "r") as f:
+                for line in f:
+                    final_batch_cache_hit_rate.append(float(line))
 
 
 
@@ -902,6 +928,16 @@ class Solver(BaseModel):
             plt.savefig(cache_hit_rate_pic_filename)
             plt.close()
 
+            #画出batch_cache_hit_rate的变化图
+            batch_cache_hit_rate_pic_filename = f"{foldername}/final_batch_cache_hit_rate{enable_number}"
+            plt.figure()
+            batch_cache_x = [i for i in range(len(final_batch_cache_hit_rate))]
+            plt.plot(batch_cache_x, final_batch_cache_hit_rate)
+            plt.xlabel('batch')
+            plt.ylabel('batch_cache_hit_rate')
+            plt.savefig(batch_cache_hit_rate_pic_filename)
+            plt.close()
+
 
             #记录时间
             data = {
@@ -919,7 +955,8 @@ class Solver(BaseModel):
                 "pre_attention_flops": final_pre_attention_flops,
                 "nopre_linear_flops": final_nopre_linear_flops,
                 "nopre_attention_flops": final_nopre_attention_flops,
-                "cache_hit_rate": final_cache_hit_rate
+                "cache_hit_rate": final_cache_hit_rate,
+                "batch_cache_hit_rate": final_batch_cache_hit_rate
             }
             #输出为json文件
             data_filename = f"{foldername}/final_data{enable_number}.json"

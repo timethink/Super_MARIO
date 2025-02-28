@@ -1,17 +1,137 @@
-from sglang.utils import (
-    execute_shell_command,
-    wait_for_server,
-    terminate_process,
-    print_highlight,
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import json
+
+def get_current_temperature(location: str, unit: str = "celsius"):
+    """Get current temperature at a location.
+
+    Args:
+        location: The location to get the temperature for, in the format "City, State, Country".
+        unit: The unit to return the temperature in. Defaults to "celsius". (choices: ["celsius", "fahrenheit"])
+
+    Returns:
+        the temperature, the location, and the unit in a dict
+    """
+    return {
+        "temperature": 26.1,
+        "location": location,
+        "unit": unit,
+    }
+
+
+def get_temperature_date(location: str, date: str, unit: str = "celsius"):
+    """Get temperature at a location and date.
+
+    Args:
+        location: The location to get the temperature for, in the format "City, State, Country".
+        date: The date to get the temperature for, in the format "Year-Month-Day".
+        unit: The unit to return the temperature in. Defaults to "celsius". (choices: ["celsius", "fahrenheit"])
+
+    Returns:
+        the temperature, the location, the date and the unit in a dict
+    """
+    return {
+        "temperature": 25.9,
+        "location": location,
+        "date": date,
+        "unit": unit,
+    }
+
+
+def get_function_by_name(name):
+    if name == "get_current_temperature":
+        return get_current_temperature
+    if name == "get_temperature_date":
+        return get_temperature_date
+
+TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_temperature",
+            "description": "Get current temperature at a location.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": 'The location to get the temperature for, in the format "City, State, Country".',
+                    },
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": 'The unit to return the temperature in. Defaults to "celsius".',
+                    },
+                },
+                "required": ["location"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_temperature_date",
+            "description": "Get temperature at a location and date.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": 'The location to get the temperature for, in the format "City, State, Country".',
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": 'The date to get the temperature for, in the format "Year-Month-Day".',
+                    },
+                    "unit": {
+                        "type": "string",
+                        "enum": ["celsius", "fahrenheit"],
+                        "description": 'The unit to return the temperature in. Defaults to "celsius".',
+                    },
+                },
+                "required": ["location", "date"],
+            },
+        },
+    },
+]
+MESSAGES = [
+    {"role": "system", "content": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant.\n\nCurrent Date: 2024-09-30"},
+    {"role": "user",  "content": "What's the temperature in San Francisco now? How about tomorrow?"},
+]
+
+
+model_name_or_path = "Qwen/Qwen2.5-7B-Instruct"
+
+tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name_or_path,
+    torch_dtype="auto",
+    device_map="auto",
 )
 
-server_process = execute_shell_command(
-    "python -m sglang.launch_server --model-path /workspace/AlphaMath-7B --port 30000 --host 0.0.0.0 "
+tools = TOOLS
+messages = MESSAGES[:]
+
+from openai import OpenAI
+
+openai_api_key = "EMPTY"
+openai_api_base = "http://localhost:8000/v1"
+
+client = OpenAI(
+    api_key=openai_api_key,
+    base_url=openai_api_base,
 )
 
-wait_for_server("http://localhost:30000")
+model_name = "Qwen/Qwen2.5-7B-Instruct"
 
-
-
-
-
+response = client.chat.completions.create(
+    model=model_name,
+    messages=messages,
+    tools=tools,
+    temperature=0.7,
+    top_p=0.8,
+    max_tokens=512,
+    extra_body={
+        "repetition_penalty": 1.05,
+    },
+)
+print(json.dumps(response, indent=4, ensure_ascii=False))

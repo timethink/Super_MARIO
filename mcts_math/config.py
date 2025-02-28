@@ -197,6 +197,10 @@ class BaseConfig:
     batch_id: Optional[int] = field(
         default=0, metadata={"help": "batch id"}
     )
+    #sglang的mem_fraction_static
+    mem_fraction_static: Optional[float] = field(
+        default=None, metadata={"help": "sglang mem_fraction_static"}
+    )
 
 
 if __name__ == '__main__':

@@ -143,7 +143,7 @@ def main():
 
 
     for batch_id in range(question_range // config.batch_size):
-        foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
         #if os.path.exists(foldername) and config.enable_prefix_caching == False:
         #    shutil.rmtree(foldername)
         if not os.path.exists(foldername):
@@ -225,8 +225,13 @@ def main():
                 f.flush()
 
             print(f"batch_id: {batch_id}\n")
-                
+            batch_start_time = time.time()
             jsonlines = solver.solve(agents, batch_id)
+            batch_end_time = time.time()
+            foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
+            log_filename = f"{foldername}/time_cost.txt"
+            with open(log_filename, "w") as f:
+                f.write(f"batch_id: {batch_id}, time cost: {batch_end_time - batch_start_time}\n")
             batch_id += 1
             #print(jsonlines)
             """
@@ -240,10 +245,7 @@ def main():
             
     end_time = datetime.now()
     print(f"Time cost: {end_time - start_time}")
-    log_filename = "/workspace/MARIO_EVAL/data/time_stats.txt"
-    with open(log_filename, "a") as f:
-        f.write(f"context: {config}\n")
-        f.write(f"Time cost: {end_time - start_time}\n")
+
     solver.llm_shutdown()
     return config
     """
@@ -282,7 +284,7 @@ def draw_pic(config):
     batch_num = config.question_range // config.batch_size
     #分多个batch输出数据
     for batch_id in range(batch_num):
-        foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
         datafile0 = f"{foldername}/final_data{0}.json"
         datafile1 = f"{foldername}/final_data{1}.json"
         """with open(data_filename, "w") as f:
@@ -402,10 +404,10 @@ def sglang_vllm_pic(config):
     batch_num = config.question_range // config.batch_size
     #分多个batch输出数据
     for batch_id in range(batch_num):
-        foldername1 = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
-        foldername2 = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        foldername1 = f'/workspace/MARIO_EVAL/data/runtime_data/vllm_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
+        foldername2 = f'/workspace/MARIO_EVAL/data/runtime_data/sglang_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
 
-        foldername3 = f'/workspace/MARIO_EVAL/data/runtime_data/compare_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{batch_id}batch_id'
+        foldername3 = f'/workspace/MARIO_EVAL/data/runtime_data/compare_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
 
         if os.path.exists(foldername3):
             shutil.rmtree(foldername3)
@@ -546,12 +548,13 @@ def sglang_vllm_pic(config):
 if __name__ == '__main__':
     #sglang_vllm_pic()
     
-    test_batch_size = [32,16,8]
-    test_n_generate_sample = [4,8,16]
+    test_batch_size = [4]
+    test_n_generate_sample = [8]
     test_iterations = [40]
-    test_question_range = [16,32]
-    num_few_shots = [0,1]
+    test_question_range = [8]
+    num_few_shots = [0]
     run_tool = ["sglang"]
+    mem_fraction_static = [0.5]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:
@@ -559,33 +562,35 @@ if __name__ == '__main__':
                 for question_range in test_question_range:
                     for num_few_shot in num_few_shots:
                         for tool in run_tool:
-                            new_params = {
-                                'batch_size': batch_size,
-                                'n_generate_sample': n_generate_sample,
-                                'iterations': iterations,
-                                'question_range': question_range,
-                                'enable_prefix_caching': True,
-                                'best_of': n_generate_sample,
-                                "num_few_shot": num_few_shot,
-                                "run_tool": tool
-                            }
-                            modify_yaml("configs/mcts_sft.yaml", **new_params)
-                            print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
-                            
-                            
-                            config = main()
-                            torch.cuda.empty_cache()
-                            #清除cache
+                            for mem_fraction in mem_fraction_static:
+                                new_params = {
+                                    'batch_size': batch_size,
+                                    'n_generate_sample': n_generate_sample,
+                                    'iterations': iterations,
+                                    'question_range': question_range,
+                                    'enable_prefix_caching': True,
+                                    'best_of': n_generate_sample,
+                                    "num_few_shot": num_few_shot,
+                                    "run_tool": tool,
+                                    "mem_fraction_static": mem_fraction,
+                                }
+                                modify_yaml("configs/mcts_sft.yaml", **new_params)
+                                print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}, mem_fraction_static: {mem_fraction}")
+                                
+                                
+                                config = main()
+                                torch.cuda.empty_cache()
+                                #清除cache
 
-                            
-                            #cleanup_dist_env_and_memory()
-                            #enable_params = {
-                            #    'enable_prefix_caching': True
-                            #}
-                            
-                            #modify_yaml("configs/mcts_sft.yaml", **enable_params)
-                            #print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
-                            #config2 = main()
-                            #draw_pic(config)
+                                
+                                #cleanup_dist_env_and_memory()
+                                #enable_params = {
+                                #    'enable_prefix_caching': True
+                                #}
+                                
+                                #modify_yaml("configs/mcts_sft.yaml", **enable_params)
+                                #print(f"batch_size: {batch_size}, n_generate_sample: {n_generate_sample}, iterations: {iterations}, question_range: {question_range}, num_few_shot: {num_few_shot}, run_tool: {tool}")
+                                #config2 = main()
+                                #draw_pic(config)
                         #sglang_vllm_pic(config)
     

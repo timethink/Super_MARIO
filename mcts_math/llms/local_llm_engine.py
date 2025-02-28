@@ -53,6 +53,8 @@ def llm_init(config):
             #swap_space=config.swap_space,
             disable_radix_cache=(not config.enable_prefix_caching),
             dtype="bfloat16",
+            allow_auto_truncate = True,#添加以防止中止
+            mem_fraction_static = config.mem_fraction_static,
             #enable_metrics = True,
             #disable_log_stats=config.disable_log_stats,#控制是否打印日志
         )
