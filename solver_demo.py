@@ -226,12 +226,16 @@ def main():
 
             print(f"batch_id: {batch_id}\n")
             batch_start_time = time.time()
-            jsonlines = solver.solve(agents, batch_id)
+            #jsonlines = solver.solve(agents, batch_id)
+            total_mfu_time, total_mfu = solver.solve(agents, batch_id)
             batch_end_time = time.time()
             foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
-            log_filename = f"{foldername}/time_cost.txt"
-            with open(log_filename, "w") as f:
-                f.write(f"batch_id: {batch_id}, time cost: {batch_end_time - batch_start_time}\n")
+            log_filename = f"{foldername}/end_end_data.txt"
+            with open(log_filename, "w") as f:#记录total_mfu_time, total_mfu,每个个batch的时间
+                f.write(f"batch_id: {batch_id}\n")
+                f.write(f"total_mfu_time: {total_mfu_time}\n")
+                f.write(f"total_mfu: {total_mfu}\n")
+                f.write(f"batch_time: {batch_end_time - batch_start_time}\n")
             batch_id += 1
             #print(jsonlines)
             """
@@ -245,7 +249,11 @@ def main():
             
     end_time = datetime.now()
     print(f"Time cost: {end_time - start_time}")
-
+    #把所有Batch的总时间写入foldername的第一个batch的log文件中
+    foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_0batch_id'
+    log_filename1 = f"{foldername}/all_batch_data.txt"
+    with open(log_filename1, "w") as f:
+        f.write(f"Time cost: {end_time - start_time}\n")
     solver.llm_shutdown()
     return config
     """

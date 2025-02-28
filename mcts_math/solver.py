@@ -426,6 +426,7 @@ class Solver(BaseModel):
         
 
         #先删除已有的一些包含cache信息的文件
+        """
         if os.path.exists("/workspace/Super_MARIO/cache_hit_rate.txt"):
             os.remove("/workspace/Super_MARIO/cache_hit_rate.txt")
         if os.path.exists("/workspace/Super_MARIO/current_batch_cache_hit_rate.txt"):
@@ -439,11 +440,12 @@ class Solver(BaseModel):
         
         if os.path.exists("/workspace/Super_MARIO/max_fill_ids.txt"):
             os.remove("/workspace/Super_MARIO/max_fill_ids.txt")
-        
+        """
 
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
             #将当前是第几个step保存到cache_info.txt文件中
+            """
             with open("/workspace/Super_MARIO/cache_info.txt", "a") as f:
                 f.write("\n")
                 f.write(f"current step:{step}\n")
@@ -452,6 +454,7 @@ class Solver(BaseModel):
                 f.write("\n")
                 f.write(f"current step:{step}\n")
                 f.write("\n")
+            """
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
             #在mcts中，这里的solvers是agents，每个agent包含一个MCTS对象，包括question，ground_truth,current_nodes,candidate_nodes等信息
             #将prompts,prompts_span,valid_solvers,invalid_solvers保存到文件中
@@ -492,12 +495,15 @@ class Solver(BaseModel):
             else:
                 folder_number0 = 0
             #创建foldername1的runtime_prompt文件夹
+            """
             if not os.path.exists(f"{foldername}/runtime_prompt{folder_number0}"):
                 os.makedirs(f"{foldername}/runtime_prompt{folder_number0}")
+            
             prompt_filename1 = f"{foldername}/runtime_prompt{folder_number0}/step_{step}_pre_generate_prompts.json"
             with open(prompt_filename1, "w") as f:
                 f.write(str(prompts))
                 f.write("\n")
+            """
             
           
           #计算mfu
@@ -615,14 +621,18 @@ class Solver(BaseModel):
             #读取/workspace/Super_MARIO/cache_hit_rate.txt文件得到cache_hit_rate
 
             final_cache_hit_rate = []
+            final_batch_cache_hit_rate = []
+            """
             with open("/workspace/Super_MARIO/cache_hit_rate.txt", "r") as f:
                 for line in f:
                     final_cache_hit_rate.append(float(line))
+            
                 
-            final_batch_cache_hit_rate = []
+            
             with open("/workspace/Super_MARIO/current_batch_cache_hit_rate.txt", "r") as f:
                 for line in f:
                     final_batch_cache_hit_rate.append(float(line))
+            """
 
 
 
@@ -664,12 +674,15 @@ class Solver(BaseModel):
             else:
                 folder_number = 0
             
+            """
             if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
                 os.makedirs(f"{foldername}/runtime_output{folder_number}")
+
             filename2 = f"{foldername}/runtime_output{folder_number}/step_{step}_transform_outputs.json"
             with open(filename2, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
+            """
             
             
             """CompletionOutput(index=0, text='<step>\n<p>\nFrom the result, we can see that the vertical asymptotes of the graph of $y=\\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.\n</p>\n<p>\nFinal Answer: $2$\n</p>\n', token_ids=[27, 9215, 29, 185, 27, 79, 29, 185, 4044, 254, 1230, 11, 395, 481, 1019, 344, 254, 10796, 16534, 5671, 280, 254, 4150, 280, 363, 88, 1928, 1122, 90, 17, 1061, 87, 61, 17, 10, 87, 12, 21, 759, 418, 430, 363, 87, 10196, 18, 3, 285, 363, 87, 28, 17, 1332, 185, 535, 79, 29, 185, 27, 79, 29, 185, 19275, 35829, 25, 363, 17, 3, 185, 535, 79, 29, 185, 535, 9215, 29], cumulative_logprob=-0.989820027285532, logprobs=None, finish_reason=stop), CompletionOutput"""
@@ -724,12 +737,15 @@ class Solver(BaseModel):
             prompts, prompts_span = self.value_preprocess(valid_solvers)
             #将prompts和prompts_span保存到文件中
             #奇怪，这里为什么prompts和prompts_span是空的？
+            """
             if not os.path.exists(f"{foldername}/runtime_prompt{folder_number}"):
                 os.makedirs(f"{foldername}/runtime_prompt{folder_number}")
             prevalue_filename = f"{foldername}/runtime_prompt{folder_number}/step_{step}_prevalue_prompt.json"
             with open(prevalue_filename, "w") as f:
                 f.write(str(prompts))
                 f.write("\n")
+            """
+
             """
             filename5 = f"/workspace/MARIO_EVAL/data/step_{step}_prevalue_prompts.json"
             with open(filename5, "w") as f:
@@ -753,12 +769,14 @@ class Solver(BaseModel):
                 outputs = self.llm(prompts, self.value_sampling_params)
                 #将初始outputs保存到文件中
                 
+                """
                 if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
                     os.makedirs(f"{foldername}/runtime_output{folder_number}")
                 value_filename = f"{foldername}/runtime_output{folder_number}/step_{step}_value_outputs.json"
                 with open(value_filename, "w") as f:
                     f.write(str(outputs))
                     f.write("\n")
+                """
                 
                 reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
             else:
@@ -840,6 +858,7 @@ class Solver(BaseModel):
             else:
                 enable_number = 0
 
+            """
             pre_mfu_pic_filename = f"{foldername}/final_pre_mfu{enable_number}"
             #画出final_seq_len和final_mfu随step的变化图，在同一个图中
             #pic_mfu是final_mfu的十万倍
@@ -903,20 +922,7 @@ class Solver(BaseModel):
             plt.ylabel('unfinished')
             plt.savefig(unfinished_pic_filename)
             plt.close()
-
-
-
-            """
-            #画出mfu随seq_len的变化图
-            seq_mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_seq_mfu"
-            final_seq_len_sort = sorted(final_seq_len)
-            pic_mfu_sort = [pic_mfu[final_seq_len.index(x)] for x in final_seq_len_sort]
-            plt.figure()
-            plt.plot(final_seq_len_sort, pic_mfu_sort)
-            plt.xlabel('seq_len')
-            plt.ylabel('mfu')
-            plt.savefig(seq_mfu_filename)
-            """
+            
 
             #画出cache_hit_rate的变化图
             cache_hit_rate_pic_filename = f"{foldername}/final_cache_hit_rate{enable_number}"
@@ -937,7 +943,7 @@ class Solver(BaseModel):
             plt.ylabel('batch_cache_hit_rate')
             plt.savefig(batch_cache_hit_rate_pic_filename)
             plt.close()
-
+            
 
             #记录时间
             data = {
@@ -963,31 +969,26 @@ class Solver(BaseModel):
             #如果文件存在，则删除
             #if os.path.exists(data_filename):
             #    os.remove(data_filename)
+            
             with open(data_filename, "w") as f:
                 json.dump(data, f, indent=4)
+            """
         """
-        mfu_pic_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu"
-        #画出final_seq_len和final_mfu随step的变化图，在同一个图中
-        #pic_mfu是final_mfu的十万倍
-        plt.figure()
-        plt.plot(final_step, final_mfu, label='mfu')
-        plt.xlabel('step')
-        plt.ylabel('percent')
-        plt.legend()
-        plt.savefig(mfu_pic_filename)
-        seq_mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_seq_mfu"
-        final_seq_len_sort = sorted(final_seq_len)
-        pic_mfu_sort = [pic_mfu[final_seq_len.index(x)] for x in final_seq_len_sort]
-        plt.figure()
-        plt.plot(final_seq_len_sort, pic_mfu_sort)
-        plt.xlabel('seq_len')
-        plt.ylabel('mfu')
-        plt.savefig(seq_mfu_filename)
-        
-
         tree_pic_name5 =  f"/workspace/MARIO_EVAL/data/pic_tree/{datetime.now().strftime('%Y%m%d%H%M%S')}_final_tree"        
 
         """
+        #得到总的mfu_time和flops
+        total_mfu_time = 0
+        total_nopre_flops = 0
+        for mfu_time in final_time:
+            total_mfu_time += mfu_time
+        for nopre_flops in final_nopre_flops:
+            total_nopre_flops += nopre_flops
+
+        #计算总的mfu
+        total_mfu = total_nopre_flops / (A100_flops * total_mfu_time)
+        return total_mfu_time,total_mfu
+
     
     def llm_shutdown(self):
         if self.config.run_tool == "sglang":
