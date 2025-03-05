@@ -1,0 +1,68 @@
+主机：
+git clone https://github.com/timethink/Super_MARIO.git
+git clone https://github.com/MARIO-Math-Reasoning/MARIO_EVAL.git
+git clone https://github.com/vllm-project/vllm.git
+
+
+mkdir /home/v-xiangzyu/MARIO_EVAL/data/runtime
+mkdir /home/v-xiangzyu/MARIO_EVAL/data/runtime_data
+
+sudo apt update
+sudo apt install git-lfs
+git lfs install
+git clone https://huggingface.co/MARIO-Math-Reasoning/AlphaMath-7B
+
+docker run --gpus all --name test1 -v $(pwd):/workspace --ipc=host --ulimit memlock=-1 --ulimit stack=67108864 -it nvcr.io/nvidia/pytorch:24.03-py3
+
+docker安装：
+
+cd Super_MARIO && pip install -r requirements.txt && cd ..
+cd MARIO_EVAL/latex2sympy && pip install . && cd ..
+pip install -e .
+cd ../vllm
+pip install -e .
+
+pip install termcolor
+
+
+
+apt-get update
+apt-get install graphviz
+pip install graphviz
+
+pip install --upgrade pip
+pip install "sglang[all]" --find-links https://flashinfer.ai/whl/cu124/torch2.4/flashinfer/
+
+
+pip uninstall pynvml
+pip install nvidia-ml-py
+
+pip uninstall opencv-python opencv-python-headless
+pip install opencv-python==4.8.0.74
+
+
+sglang安装：
+# Use the last release branch
+git clone -b v0.4.2.post4 https://github.com/sgl-project/sglang.git
+cd sglang
+
+pip install --upgrade pip
+pip install sgl-kernel --force-reinstall --no-deps
+pip install -e "python[all]" --find-links https://flashinfer.ai/whl/cu124/torch2.5/flashinfer/
+
+
+安装miniconda:
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+bash ~/Miniconda3-latest-Linux-x86_64.sh
+
+echo 'export PATH="$HOME/miniconda3/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+
+
+conda create --name myenv python=3.10.12
+
+source ~/.bashrc
+
+conda activate myenv

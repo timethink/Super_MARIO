@@ -523,11 +523,12 @@ class Solver(BaseModel):
                 folder_number = 1
             else:
                 folder_number = 0
+                
             """
-            if not os.path.exists(f"{foldername_output}/runtime_output{folder_number}"):
-                os.makedirs(f"{foldername_output}/runtime_output{folder_number}")
+            if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
+                os.makedirs(f"{foldername}/runtime_output{folder_number}")
             
-            filename_output = f"{foldername_output}/runtime_output{folder_number}/step_{step}_generate_outputs.json"
+            filename_output = f"{foldername}/runtime_output{folder_number}/step_{step}_generate_outputs.json"
             with open(filename_output, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
