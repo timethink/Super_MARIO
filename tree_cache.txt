@@ -2,119 +2,5828 @@
 current step:0
 
 
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  30  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question>
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 0
+
+
+      147 <step>
+<p>
+To find the vertical asymptotes of the given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 0
+
+
+      140 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
 current step:1
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          21 >
+<output>
+[-3, 2]
+</output>
+</step>
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 0
+
+
+              67 <step>
+<p>
+From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        131  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  2 >
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 1
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 1
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
 
 
 current step:2
 
 
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+        152  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step>
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 0
+
+
+            73 <step>
+<p>
+From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+          39 >
+<output>
+value1: 36.0
+value2: 26.0
+difference: 10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 0
+
+
+        120  value and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+percent1 = 1.2
+value1 = percent1 * 30
+print(value1)
+
+# Calculate 130% of 20
+percent2 = 1.3
+value2 = percent2 * 20
+print(value2)
+
+# Find the positive difference between the two values
+difference = value1 - value2
+print(difference)
+```
+</code 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 0
+
+
+              59 <step>
+<p>
+The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 1
+
+
+            8 <step>
+<p>
+ 1
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 1
+
+
+            8 <step>
+<p>
+ 1
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                2 >
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                2 >
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                2 >
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                2 >
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                2 >
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  2 >
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 1
+
+
+            8 <step>
+<p>
+ 1
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 1
+
+
+            8 <step>
+<p>
+ 1
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 1
+
+
+            8 <step>
+<p>
+ 1
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 1
+
+
+    1 
+ 1
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 1
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 1
+
+
+          1 
+ 1
+
+
+            8 <step>
+<p>
+ 1
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 1
+
+
+                1 > 1
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 0
+
+
+    1 
+ 0
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 0
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 0
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              8 <step>
+<p>
+ 0
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
+4 <｜begin▁of▁sentence｜><question> 1
+
+
+  29  How many vertical asymptotes does the graph of $y=\frac{2}{x^2+x-6}$ have? </question> 0
+
+
+    1 
+ 0
+
+
+      16 <step>
+<p>
+To find the vertical asymptotes of the 0
+
+
+        145  graph of $y=\frac{2}{x^2+x-6}$, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code 0
+
+
+          20 >
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+            1 
+ 0
+
+
+              66 <step>
+<p>
+The vertical asymptotes of the graph of $y=\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+        151  given function, we need to find the values of $x$ that make the denominator zero. The denominator is $x^2+x-6$, which can be factored as $(x+3)(x-2)$. Therefore, the vertical asymptotes will occur at $x=-3$ and $x=2$.
+</p>
+<code>
+```python
+from sympy import symbols, solve
+
+x = symbols('x')
+denominator = x**2 + x - 6
+vertical_asymptotes = solve(denominator, x)
+print(vertical_asymptotes)
+```
+</code>
+<output>
+[-3, 2]
+</output>
+</step> 0
+
+
+          1 
+ 0
+
+
+            8 <step>
+<p>
+ 0
+
+
+              65 From the result, we can see that the vertical asymptotes of the given function are at $x=-3$ and $x=2$. Since there are two vertical asymptotes, the answer is 2.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+              57 The result shows that the vertical asymptotes are at $x=-3$ and $x=2$. Therefore, the graph of the given function has two vertical asymptotes.
+</p>
+<p>
+Final Answer: $2$
+</p>
+</step 0
+
+
+                1 > 0
+
+
+                  1 
+ 0
+
+
+  29  What is the positive difference between $120\%$ of 30 and $130\%$ of 20? </question> 1
+
+
+    1 
+ 1
+
+
+      40 <step>
+<p>
+To find the positive difference between $120\%$ of 30 and $130\%$ of 20, we need to first calculate each 1
+
+
+        100  term and then find the difference.
+</p>
+<code>
+```python
+# Calculate 120% of 30
+term1 = 1.2 * 30
+
+# Calculate 130% of 20
+term2 = 1.3 * 20
+
+# Find the positive difference between the two terms
+positive_difference = term1 - term2
+print(positive_difference)
+```
+</code 1
+
+
+          18 >
+<output>
+10.0
+</output>
+</step> 1
+
+
+            1 
+ 1
+
+
+              8 <step>
+<p>
+ 1
+
+
+                51 The positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 1
+
+
+                  1 > 1
+
+
+                    1 
+ 0
+
+
+                59 From the result, we can see that the positive difference between $120\%$ of 30 and $130\%$ of 20 is 10.
+</p>
+<p>
+Final Answer: $10$
+</p>
+</step 0
+
+
+                  1 > 0
+
+
+                    1 
+ 0
+
+
 current step:3
-
-
-current step:4
-
-
-current step:5
-
-
-current step:6
-
-
-current step:7
-
-
-current step:8
-
-
-current step:9
-
-
-current step:10
-
-
-current step:11
-
-
-current step:12
-
-
-current step:13
-
-
-current step:14
-
-
-current step:15
-
-
-current step:16
-
-
-current step:17
-
-
-current step:18
-
-
-current step:19
-
-
-current step:20
-
-
-current step:21
-
-
-current step:22
-
-
-current step:23
-
-
-current step:24
-
-
-current step:25
-
-
-current step:26
-
-
-current step:27
-
-
-current step:28
-
-
-current step:29
-
-
-current step:30
-
-
-current step:31
-
-
-current step:32
-
-
-current step:33
-
-
-current step:34
-
-
-current step:35
-
-
-current step:36
-
-
-current step:37
-
-
-current step:38
-
-
-current step:39
 

@@ -557,13 +557,13 @@ if __name__ == '__main__':
     #sglang_vllm_pic()
 
 
-    test_batch_size = [32,16]
-    test_n_generate_sample = [16,8,4]
-    test_iterations = [40]
-    test_question_range = [32,16]
-    num_few_shots = [0,1,2]
+    test_batch_size = [2]
+    test_n_generate_sample = [2]
+    test_iterations = [10]
+    test_question_range = [2]
+    num_few_shots = [0]
     run_tool = ["sglang"]
-    mem_fraction_static = [None, 0.5, 0.3, 0.2, 0.18, 0.17]
+    mem_fraction_static = [0.17]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:

@@ -426,7 +426,7 @@ class Solver(BaseModel):
         
 
         #先删除已有的一些包含cache信息的文件
-        """
+        
         if os.path.exists("/workspace/Super_MARIO/cache_hit_rate.txt"):
             os.remove("/workspace/Super_MARIO/cache_hit_rate.txt")
         if os.path.exists("/workspace/Super_MARIO/current_batch_cache_hit_rate.txt"):
@@ -440,7 +440,7 @@ class Solver(BaseModel):
         
         if os.path.exists("/workspace/Super_MARIO/max_fill_ids.txt"):
             os.remove("/workspace/Super_MARIO/max_fill_ids.txt")
-        """
+        
 
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
             #filename1 = f"/workspace/MARIO_EVAL/data/step_{step}_pre_solvers.json"
@@ -450,11 +450,12 @@ class Solver(BaseModel):
                 f.write("\n")
                 f.write(f"current step:{step}\n")
                 f.write("\n")
+            """
             with open("/workspace/Super_MARIO/tree_cache.txt", "a") as f:
                 f.write("\n")
                 f.write(f"current step:{step}\n")
                 f.write("\n")
-            """
+            
             prompts, prompts_span, valid_solvers, invalid_solvers = self.generate_preprocess(solvers)
             #在mcts中，这里的solvers是agents，每个agent包含一个MCTS对象，包括question，ground_truth,current_nodes,candidate_nodes等信息
             #将prompts,prompts_span,valid_solvers,invalid_solvers保存到文件中
@@ -524,7 +525,7 @@ class Solver(BaseModel):
             else:
                 folder_number = 0
                 
-            """
+            
             if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
                 os.makedirs(f"{foldername}/runtime_output{folder_number}")
             
@@ -532,7 +533,7 @@ class Solver(BaseModel):
             with open(filename_output, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
-            """
+            
             
 
             #print(outputs)
