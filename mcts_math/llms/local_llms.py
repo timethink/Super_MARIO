@@ -54,7 +54,14 @@ def local_generator(
     prompts: List[str],
     sampling_params: SamplingParams,
     engine: LLM,
+    #添加一个传入prompt和value的参数
+    with_value: bool = False,
+    input_value: float = 0.0,
 ):
-    
-    outputs = engine.generate(prompts, sampling_params=sampling_params)    # return List[RequestOutput]
-    return outputs
+    #添加一个传入prompt和value的函数，用于添加value
+    if not with_value:
+        outputs = engine.generate(prompts, sampling_params=sampling_params)    # return List[RequestOutput]
+        return outputs
+    else:
+        outputs = engine.add_value(prompts, input_value=input_value)
+        return outputs

@@ -440,6 +440,11 @@ class Solver(BaseModel):
         
         if os.path.exists("/workspace/Super_MARIO/max_fill_ids.txt"):
             os.remove("/workspace/Super_MARIO/max_fill_ids.txt")
+
+        if os.path.exists("/workspace/Super_MARIO/reqs.txt"):
+            os.remove("/workspace/Super_MARIO/reqs.txt")
+        if os.path.exists("/workspace/Super_MARIO/staging_reqs.txt"):
+            os.remove("/workspace/Super_MARIO/staging_reqs.txt")
         
 
         for step in tqdm(range(self.max_solver_steps), desc="Step Processing"):
@@ -496,7 +501,7 @@ class Solver(BaseModel):
             else:
                 folder_number0 = 0
             #创建foldername1的runtime_prompt文件夹
-            """
+            
             if not os.path.exists(f"{foldername}/runtime_prompt{folder_number0}"):
                 os.makedirs(f"{foldername}/runtime_prompt{folder_number0}")
             
@@ -504,7 +509,7 @@ class Solver(BaseModel):
             with open(prompt_filename1, "w") as f:
                 f.write(str(prompts))
                 f.write("\n")
-            """
+            
             
           
           #计算mfu
@@ -676,7 +681,7 @@ class Solver(BaseModel):
             else:
                 folder_number = 0
             
-            """
+            
             if not os.path.exists(f"{foldername}/runtime_output{folder_number}"):
                 os.makedirs(f"{foldername}/runtime_output{folder_number}")
 
@@ -684,7 +689,7 @@ class Solver(BaseModel):
             with open(filename2, "w") as f:
                 f.write(str(outputs))
                 f.write("\n")
-            """
+            
             
             
             """CompletionOutput(index=0, text='<step>\n<p>\nFrom the result, we can see that the vertical asymptotes of the graph of $y=\\frac{2}{x^2+x-6}$ are at $x=-3$ and $x=2$.\n</p>\n<p>\nFinal Answer: $2$\n</p>\n', token_ids=[27, 9215, 29, 185, 27, 79, 29, 185, 4044, 254, 1230, 11, 395, 481, 1019, 344, 254, 10796, 16534, 5671, 280, 254, 4150, 280, 363, 88, 1928, 1122, 90, 17, 1061, 87, 61, 17, 10, 87, 12, 21, 759, 418, 430, 363, 87, 10196, 18, 3, 285, 363, 87, 28, 17, 1332, 185, 535, 79, 29, 185, 27, 79, 29, 185, 19275, 35829, 25, 363, 17, 3, 185, 535, 79, 29, 185, 535, 9215, 29], cumulative_logprob=-0.989820027285532, logprobs=None, finish_reason=stop), CompletionOutput"""
@@ -817,7 +822,7 @@ class Solver(BaseModel):
             with open(filename4, "w") as f:
                 f.write(str(tmp_jsonlines))
             """
-            """
+            
             #将处理后的tree打印出来
             tree_filename4 = f"/workspace/MARIO_EVAL/data/runtime_tree/step_{step}_finish_tree.json"
             tree_pic_name4 =  f"/workspace/MARIO_EVAL/data/pic_tree/step_{step}_finish_tree"
@@ -828,7 +833,7 @@ class Solver(BaseModel):
             jsonlines4 = json.dumps(jsonlines4, indent=4)
             with open(tree_filename4, "w") as f:
                 f.write(str(jsonlines4))
-            """
+            
             """
               #记录时间
             mfu_filename = f"/workspace/MARIO_EVAL/data/runtime_mfu/final_mfu.json"
@@ -860,7 +865,7 @@ class Solver(BaseModel):
             else:
                 enable_number = 0
 
-            """
+            
             pre_mfu_pic_filename = f"{foldername}/final_pre_mfu{enable_number}"
             #画出final_seq_len和final_mfu随step的变化图，在同一个图中
             #pic_mfu是final_mfu的十万倍
@@ -975,7 +980,7 @@ class Solver(BaseModel):
             with open(data_filename, "w") as f:
                 json.dump(data, f, indent=4)
             """
-        """
+        
         tree_pic_name5 =  f"/workspace/MARIO_EVAL/data/pic_tree/{datetime.now().strftime('%Y%m%d%H%M%S')}_final_tree"        
 
         """

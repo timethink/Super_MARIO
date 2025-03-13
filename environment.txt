@@ -24,7 +24,7 @@ pip install -e .
 
 pip install termcolor
 
-
+sglang版本： 0.4.3.post4
 
 apt-get update
 apt-get install graphviz

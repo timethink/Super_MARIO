@@ -156,6 +156,26 @@ class MCTS(SBSREACT):
             node.is_terminal = True
         # backup
         node.update_recursive(value_estimate, self.root)
+        #添加
+        self.add_value_to_sglang(node)
+
+    #添加,用于处理value相关
+    def add_value_to_sglang(self, node: Type[MCTSNode]) -> None:
+        if node.is_terminal:#如果是终止节点，value应当为0或者负数
+            input_value = 0
+        else:
+            input_value = node.puct()
+        #收集partial_solution
+        partial_solution = self.collect_partial_solution(node)
+        #创建prompt
+        prompt = self.prompt_wrap(
+            self.question,
+            partial_solution,
+            self.config,
+        )
+        #将prompt和input_value传入llm
+        outputs, value_estimate = self.llm(prompt, with_value=True, input_value=input_value)
+        #print(f"outputs: {outputs}\n")
 
     def expand_node(self, outputs: List[CompletionOutput], node: Type[MCTSNode]) -> int:
         #print("This is expand node")
@@ -282,6 +302,9 @@ class MCTS(SBSREACT):
     def eval_final_answer(self, node: Type[MCTSNode]) -> None:
         if node.state["final_answer"] in [NO_VALID_CHILD, TOO_MANY_STEPS, TOO_MANY_CODE_ERRORS]:
             node.update_recursive(self.config.negative_reward, self.root)
+
+            #添加，传入value
+            #self.add_value_to_sglang(node)
             return 
         
         if self.ground_truth:
@@ -289,6 +312,8 @@ class MCTS(SBSREACT):
             correct = is_equiv(self.ground_truth, final_answer)
             # backup
             node.update_recursive(self.config.positive_reward if correct else self.config.negative_reward, self.root)
+            #添加，传入value
+            #self.add_value_to_sglang(node)
         else:
             # for testset, no ground_truth, put this node in candidate_nodes, then it will be evaluated by value model and backup in select_next_step().
             self.candidate_nodes.append(node)
@@ -319,6 +344,8 @@ class MCTS(SBSREACT):
                 #    candidate_node.is_terminal = True
                 #    print("here is None\n")
                 candidate_node.update_recursive(value_estimate, self.root)
+                #添加，传入value
+                #self.add_value_to_sglang(candidate_node)
                 if self.__class__.is_valid_final_answer_node(candidate_node):
                     self.final_answer_nodes.append(candidate_node)
         selection_node = self.selection()
@@ -399,6 +426,8 @@ class MCTS(SBSREACT):
                         self.candidate_nodes.append(value_node)
             else:#如果self.config.update_leaf_value为False，说明不用value model？
                 current_node.update_recursive(value_estimate, self.root)
+                #添加，传入value
+                #self.add_value_to_sglang(current_node)
                 #递归更新，更新visit_count和q_value，不过这里为啥用的是value_estimate？
 
     def return_states(self, file_name) -> Dict[str, Union[Any, Dict[str, str]]]:

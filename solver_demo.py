@@ -109,43 +109,17 @@ def main():
     
     #先清空"//workspace/MARIO_EVAL/data/pic_tree"文件夹 
     
-    """
-    # 删除并重新创建文件夹
-    folder_path = '/workspace/MARIO_EVAL/data/pic_tree'
-    if os.path.exists(folder_path):
-        shutil.rmtree(folder_path)
 
-    os.makedirs(folder_path)
-    """
-
-    folder_path1 = '/workspace/MARIO_EVAL/data/runtime_tree'
-    if os.path.exists(folder_path1):
-        shutil.rmtree(folder_path1)
-    
-    #folder_path100 = '/workspace/MARIO_EVAL/data/runtime_tree1'
-    #if os.path.exists(folder_path100):
-    #    shutil.rmtree(folder_path100)
-
-    os.makedirs(folder_path1)
-
-    
-    folder_path2 = '/workspace/MARIO_EVAL/data/runtime_prompt'
-    if os.path.exists(folder_path2):
-        shutil.rmtree(folder_path2)
-
-    os.makedirs(folder_path2)
-
-    folder_path3 = '/workspace/MARIO_EVAL/data/runtime_output'
-    if os.path.exists(folder_path3):
-        shutil.rmtree(folder_path3)
-
-    os.makedirs(folder_path3)
 
 
     for batch_id in range(question_range // config.batch_size):
         foldername = f'/workspace/MARIO_EVAL/data/runtime_data/{config.run_tool}_{config.batch_size}b_{config.n_generate_sample}sample_{config.iterations}iter_{config.question_range}_qaf_{config.num_few_shot}example_{config.mem_fraction_static}mem_{batch_id}batch_id'
+        #要测试开关的时候才需要加判断
         #if os.path.exists(foldername) and config.enable_prefix_caching == False:
         #    shutil.rmtree(foldername)
+        #不测试开关的时候，如果文件夹存在，就删除
+        if os.path.exists(foldername):
+            shutil.rmtree(foldername)
         if not os.path.exists(foldername):
             os.makedirs(foldername)
     
@@ -558,12 +532,12 @@ if __name__ == '__main__':
 
 
     test_batch_size = [2]
-    test_n_generate_sample = [2]
+    test_n_generate_sample = [4]
     test_iterations = [10]
     test_question_range = [2]
     num_few_shots = [0]
     run_tool = ["sglang"]
-    mem_fraction_static = [0.17]
+    mem_fraction_static = [None]
 
     for batch_size in test_batch_size:
         for n_generate_sample in test_n_generate_sample:

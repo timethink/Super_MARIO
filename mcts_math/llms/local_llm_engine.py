@@ -55,6 +55,8 @@ def llm_init(config):
             dtype="bfloat16",
             allow_auto_truncate = True,#添加以防止中止
             mem_fraction_static = config.mem_fraction_static,
+            #添加以下参数,但是发生了错误
+            #enable_hierarchical_cache = True,
             #enable_metrics = True,
             #disable_log_stats=config.disable_log_stats,#控制是否打印日志
         )
