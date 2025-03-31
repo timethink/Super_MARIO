@@ -20,7 +20,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 from omegaconf import DictConfig, OmegaConf
 
 from vllm import LLM, SamplingParams
-from vllm.outputs import RequestOutput
+from vllm.outputs import RequestOutput, CompletionOutput
 
 from pebble import ProcessPool
 from concurrent.futures import TimeoutError
@@ -93,8 +93,11 @@ class Solver(BaseModel):
         self.engine = engine
         self.generate_sampling_params = sampling_params
         self.value_sampling_params = copy.deepcopy(sampling_params)
-        self.value_sampling_params.max_tokens = 1
-        self.value_sampling_params.n = 1
+        #self.value_sampling_params.max_tokens = 1
+        #self.value_sampling_params.n = 1
+        #添加
+        self.value_sampling_params["max_new_tokens"] = 1
+        self.value_sampling_params["n"] = 1
         return partial(
             local_generator,
             engine=self.engine,
@@ -217,10 +220,18 @@ class Solver(BaseModel):
                 n = self.config.n_generate_sample * self.config.step_beam_width
             else:
                 n = self.config.n_generate_sample
-            self.generate_sampling_params.n = n
-            self.generate_sampling_params.best_of = n
+            #self.generate_sampling_params.n = n
+            #self.generate_sampling_params.best_of = n
+            self.generate_sampling_params["n"] = n
 
             outputs = self.llm(prompts, self.generate_sampling_params)
+            #添加，将sglang的输出转换为vllm的输出
+            outputs = transform_sglang_to_vllm(prompts, outputs, self.generate_sampling_params)
+            #添加，将随机数赋给每个output.value_estimate
+            for i in range(len(outputs)):
+                outputs[i].value_estimate = np.random.rand()
+
+
             # post-process outputs
             reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
 
@@ -231,6 +242,11 @@ class Solver(BaseModel):
             prompts, prompts_span = self.value_preprocess(valid_solvers)
             if self.need_value_func:
                 outputs = self.llm(prompts, self.value_sampling_params)
+                #添加，将sglang的输出转换为vllm的输出
+                outputs = transform_sglang_to_vllm(prompts, outputs, self.value_sampling_params)
+                #添加，将随机数赋给每个output.value_estimate
+                for i in range(len(outputs)):
+                    outputs[i].value_estimate = np.random.rand()
                 reconstructed_outputs = [outputs[bos_idx : eos_idx] for bos_idx, eos_idx in zip(prompts_span, prompts_span[1:])]
             else:
                 reconstructed_outputs = [None] * (len(prompts_span) - 1)
@@ -247,3 +263,68 @@ class Solver(BaseModel):
             jsonlines[solver.question] = solver.return_states()
         
         return jsonlines
+
+#添加，将sglang的输出转换为vllm的输出
+def transform_sglang_to_vllm(prompts, outputs, sampling_params) -> List[RequestOutput]:
+    #修改成SGlang的形式
+    n_sample = sampling_params["n"]
+    #print(f"len(prompts) = {len(prompts)}, len(outputs) = {len(outputs)}, n_sample = {n_sample}")
+    if len(prompts) * n_sample != len(outputs):
+        raise ValueError("The number of prompts and outputs does not match.")
+    new_request_outputs = []
+    i = 0
+    for prompt in prompts:
+        completion_outputs = []
+        request_id = str(i)
+        request_prompt = prompt
+        
+        finished = True
+        for j in range(n_sample):
+            output = outputs[i*n_sample+j]
+            if j == 0:
+                num_cached_tokens = output["meta_info"]["cached_tokens"]
+                prompt_len = output["meta_info"]["prompt_tokens"]
+                #填充一个长度为prompt_len的list
+                request_prompt_token_ids = [0] * prompt_len
+            completion_index = j
+            completion_text = output["text"]
+            #token_ids暂时随便填充
+            completion_token_num = output["meta_info"]["completion_tokens"]
+            completion_token_ids = [0] * completion_token_num
+            completion_finish_reason = output["meta_info"]["finish_reason"]["type"]
+            #添加add_value相关：rid
+            completion_rid = output["meta_info"]["id"]
+
+            #如果没有matched字段，则将stop_reason设置为\n</code>
+            if "matched" not in output["meta_info"]["finish_reason"]:
+                completion_stop_reason = '\n</code>'
+            else:
+                completion_stop_reason = output["meta_info"]["finish_reason"]["matched"]
+            #completion_stop_reason = '\n</code>'
+            new_completion_output = CompletionOutput(
+                    index=completion_index,
+                    text=completion_text,
+                    token_ids=completion_token_ids,
+                    cumulative_logprob=-1,#暂时填充
+                    logprobs=None,
+                    finish_reason=completion_finish_reason,
+                    stop_reason=completion_stop_reason,
+                    lora_request=None,
+            )
+            completion_outputs.append(new_completion_output)
+        new_request_output = RequestOutput(
+            request_id=request_id,
+            prompt=request_prompt,
+            prompt_token_ids=request_prompt_token_ids,
+            prompt_logprobs=None,
+            outputs=completion_outputs,
+            finished=finished,
+            metrics=None,
+            lora_request=None,
+            encoder_prompt=None,
+            encoder_prompt_token_ids=None,
+            num_cached_tokens=num_cached_tokens
+        )
+        new_request_outputs.append(new_request_output)
+        i += 1
+    return new_request_outputs

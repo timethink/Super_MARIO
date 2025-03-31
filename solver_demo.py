@@ -54,7 +54,8 @@ if __name__ == '__main__':
     else:
         raise NotImplementedError
 
-    saved_jsonl_file = f"{args.qaf}.{config.mode}.{llm_version}.{datetime.now().strftime('%Y%m%d%H%M%S')}.jsonl" 
+    #saved_jsonl_file = f"{args.qaf}.{config.mode}.{llm_version}.{datetime.now().strftime('%Y%m%d%H%M%S')}.jsonl" 
+    saved_jsonl_file = "/workspace/MARIO_EVAL/data/mcts.jsonl"
     with open(saved_jsonl_file, "w") as writer:
         for cur_data in tqdm(batch(data, config.batch_size), desc="Main Processing"):
             agents = [method(config=config, question=d["question"], ground_truth=d["answer"] if config.is_sampling else None) 
